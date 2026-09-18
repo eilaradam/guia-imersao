@@ -15,7 +15,7 @@
   --line:#E8E0D8; --muted:#5A5550; --white:#fff; --soft:#FFF0E8; --butter:#FEF7CF;
   --green:#1C7A4E; --green-soft:#E8F5EE;
   --fh:'Montserrat',Arial,sans-serif; --fb:'DM Sans',Arial,sans-serif; --fm:'DM Mono',ui-monospace,monospace;
-  --nav:320px;
+  --nav:320px; --rail:74px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--cream);color:var(--ink);font-family:var(--fb);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -48,6 +48,38 @@ a{color:var(--red)}
 #menu a .ok{margin-left:auto;color:var(--green);font-weight:700}
 #menu a.on .ok{color:#8CE0B4}
 #fechar{display:none;position:absolute;top:18px;right:18px;background:none;border:0;font-size:26px;cursor:pointer;color:var(--ink);line-height:1}
+
+/* ---------- menu recolhido (só no computador) ---------- */
+#recolher{position:absolute;top:26px;right:16px;width:30px;height:30px;border:1px solid var(--line);background:var(--white);
+  border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:var(--muted);
+  transition:color .15s,border-color .15s;z-index:2}
+#recolher:hover{color:var(--ink);border-color:var(--ink)}
+#recolher svg{width:15px;height:15px;transition:transform .25s}
+.marca__mini{display:none;font-size:24px;text-align:center;line-height:1}
+
+@media (min-width:1001px){
+  #menu{transition:width .22s ease, padding .22s ease, box-shadow .22s ease}
+  body.recolhido #palco{margin-left:var(--rail);transition:margin-left .22s ease}
+  body.recolhido #menu{overflow-x:hidden;overflow-y:auto;scrollbar-width:none}
+  body.recolhido #menu::-webkit-scrollbar{display:none}
+  /* o estado estreito vale só enquanto o mouse não está nele:
+     passar o mouse ou dar foco pelo teclado já abre de volta */
+  body.recolhido #menu:not(:hover):not(:focus-within){width:var(--rail);padding:24px 10px 68px}
+  body.recolhido #menu:not(:hover):not(:focus-within) .marca,
+  body.recolhido #menu:not(:hover):not(:focus-within) .anel .t,
+  body.recolhido #menu:not(:hover):not(:focus-within) .parte,
+  body.recolhido #menu:not(:hover):not(:focus-within) a .txt,
+  body.recolhido #menu:not(:hover):not(:focus-within) a .ok,
+  body.recolhido #menu:not(:hover):not(:focus-within) .rodapeMenu{display:none}
+  body.recolhido #menu:not(:hover):not(:focus-within) .marca__mini{display:block;margin-bottom:14px}
+  body.recolhido #menu:not(:hover):not(:focus-within) #recolher{position:fixed;top:auto;bottom:22px;left:22px;right:auto;transform:none;box-shadow:0 2px 12px rgba(27,27,27,.16)}
+  body.recolhido #menu:not(:hover):not(:focus-within) #recolher svg{transform:rotate(180deg)}
+  body.recolhido #menu:not(:hover):not(:focus-within) .anel{padding:8px;justify-content:center;margin:0 0 14px}
+  body.recolhido #menu:not(:hover):not(:focus-within) a{justify-content:center;padding:7px 0}
+  body.recolhido #menu:not(:hover):not(:focus-within) a .em{font-size:19px}
+  body.recolhido #menu:hover, body.recolhido #menu:focus-within{box-shadow:14px 0 40px rgba(27,27,27,.14);overflow-y:auto}
+}
+@media (max-width:1000px){ #recolher{display:none} }
 
 /* ---------- palco ---------- */
 #palco{margin-left:var(--nav);padding:56px 7vw 90px;max-width:1180px}
@@ -260,6 +292,10 @@ ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;h
 
 <aside id="menu">
   <button id="fechar" aria-label="Fechar">×</button>
+  <button id="recolher" type="button" aria-label="Recolher o menu" title="Recolher o menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <div class="marca__mini" aria-hidden="true">📓</div>
   <div class="marca">Guia da <span>Imersão</span><small>Dia 1 · Construir</small></div>
   <div class="anel">
     <svg width="46" height="46" viewBox="0 0 46 46"><circle cx="23" cy="23" r="19" fill="none" stroke="#E8E0D8" stroke-width="5"/><circle id="aro" cx="23" cy="23" r="19" fill="none" stroke="#C8441A" stroke-width="5" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>
@@ -987,12 +1023,29 @@ var nav = document.getElementById('nav');
     }
     lista += '<li><a href="#' + s.id + '" data-ir="' + s.id + '">' +
              '<span class="em">' + s.dataset.em + '</span>' +
-             '<span>' + (i+1) + '. ' + s.dataset.nome + '</span>' +
+             '<span class="txt">' + (i+1) + '. ' + s.dataset.nome + '</span>' +
              '<span class="ok" data-ok="' + s.id + '"></span></a></li>';
   });
   if(lista) html += '<ol>' + lista + '</ol>';
   nav.innerHTML = html;
 })();
+
+/* ---------- menu recolhido ---------- */
+var CHAVE_MENU = 'guia-imersao:menu';
+var btnRecolher = document.getElementById('recolher');
+function pintarRecolher(){
+  var r = document.body.classList.contains('recolhido');
+  btnRecolher.setAttribute('aria-label', r ? 'Abrir o menu' : 'Recolher o menu');
+  btnRecolher.setAttribute('title',      r ? 'Abrir o menu' : 'Recolher o menu');
+}
+try{ if(localStorage.getItem(CHAVE_MENU) === 'recolhido') document.body.classList.add('recolhido'); }catch(e){}
+pintarRecolher();
+btnRecolher.addEventListener('click', function(){
+  var r = document.body.classList.toggle('recolhido');
+  try{ localStorage.setItem(CHAVE_MENU, r ? 'recolhido' : 'aberto'); }catch(e){}
+  pintarRecolher();
+  btnRecolher.blur();   /* senao o :focus-within segura o menu aberto */
+});
 
 /* ---------- navegacao ---------- */
 var menu = document.getElementById('menu');
