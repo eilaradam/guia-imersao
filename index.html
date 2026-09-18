@@ -1125,26 +1125,34 @@ var relogioSync;
 function quemSou(){
   try{ return JSON.parse(localStorage.getItem(CHAVE_ALUNA) || 'null'); }catch(e){ return null; }
 }
+function mandarProgresso(corpo){
+  try{
+    return fetch(SB_URL + '/rest/v1/rpc/imersao_salvar_progresso', {
+      method: 'POST', keepalive: true,
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(corpo)
+    }).then(function(r){ return r.ok; }).catch(function(){ return false; });
+  }catch(e){ return Promise.resolve(false); }
+}
 function sincronizar(){
   var eu = quemSou();
   if(!eu || !eu.arroba) return;
   var feitos = Object.keys(estado.feitos || {});
-  try{
-    fetch(SB_URL + '/rest/v1/rpc/imersao_salvar_progresso', {
-      method: 'POST', keepalive: true,
-      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        p_arroba: eu.arroba,
-        p_nome: eu.nome || null,
-        p_email: eu.email || null,
-        p_whatsapp: eu.whatsapp || null,
-        p_etapa: estado.ultima || 'e1',
-        p_feitos: feitos,
-        p_marcados: feitos.length,
-        p_total: todas.length
-      })
-    }).catch(function(){});
-  }catch(e){}
+  var basico = {
+    p_arroba: eu.arroba,
+    p_nome: eu.nome || null,
+    p_etapa: estado.ultima || 'e1',
+    p_feitos: feitos,
+    p_marcados: feitos.length,
+    p_total: todas.length
+  };
+  var completo = { p_email: eu.email || null, p_whatsapp: eu.whatsapp || null };
+  for(var k in basico) completo[k] = basico[k];
+
+  /* se o banco ainda nao tiver as colunas de e-mail e whatsapp, grava o resto.
+     a identidade vai junto em toda sincronia, entao quando as colunas nascerem
+     o proximo envio preenche elas sozinho. */
+  mandarProgresso(completo).then(function(ok){ if(!ok) mandarProgresso(basico); });
 }
 /* junta as marcacoes rapidas numa mandada so */
 function agendarSync(){ clearTimeout(relogioSync); relogioSync = setTimeout(sincronizar, 1200); }
@@ -1191,12 +1199,24 @@ window.addEventListener('load', function(){ window.scrollTo(0,0); });
   var CH = 'guia-imersao:aluna';
 
   function temSenha(){ try{ return localStorage.getItem('imersaoOk') === '1'; }catch(e){ return false; } }
+  /* quem entrou na versao antiga (so nome e @) precisa completar o cadastro */
+  function guardado(){
+    try{ return JSON.parse(localStorage.getItem(CH) || 'null') || {}; }catch(e){ return {}; }
+  }
   function temNome(){
-    try{ var x = JSON.parse(localStorage.getItem(CH) || 'null'); return !!(x && x.arroba); }catch(e){ return false; }
+    var x = guardado();
+    return !!(x.nome && x.arroba && x.email && x.whatsapp);
   }
   function abrePasso(el, foco){
     passoSenha.hidden = (el !== passoSenha);
     passoNome.hidden  = (el !== passoNome);
+    if(el === passoNome){
+      var x = guardado();
+      if(x.nome)     document.getElementById('campoNome').value = x.nome;
+      if(x.email)    document.getElementById('campoEmail').value = x.email;
+      if(x.arroba)   document.getElementById('campoArroba').value = '@' + x.arroba;
+      if(x.whatsapp) document.getElementById('campoZap').value = x.whatsapp;
+    }
     setTimeout(function(){ try{ document.getElementById(foco).focus(); }catch(e){} }, 160);
   }
   function seguir(){
