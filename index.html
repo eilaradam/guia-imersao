@@ -15,7 +15,7 @@
   --line:#E8E0D8; --muted:#5A5550; --white:#fff; --soft:#FFF0E8; --butter:#FEF7CF;
   --green:#1C7A4E; --green-soft:#E8F5EE;
   --fh:'Montserrat',Arial,sans-serif; --fb:'DM Sans',Arial,sans-serif; --fm:'DM Mono',ui-monospace,monospace;
-  --nav:320px; --rail:74px;
+  --nav:252px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--cream);color:var(--ink);font-family:var(--fb);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -29,60 +29,28 @@ a{color:var(--red)}
 #barraMini{position:fixed;top:0;left:0;height:3px;background:var(--red);width:0;z-index:50;transition:width .3s}
 
 /* ---------- menu lateral ---------- */
-#menu{position:fixed;top:0;left:0;width:var(--nav);height:100vh;overflow-y:auto;background:var(--cream2);border-right:1px solid var(--line);padding:30px 22px 40px;z-index:45}
-.marca{font-family:var(--fh);font-weight:900;font-size:21px;letter-spacing:-.02em;line-height:1.1}
+#menu{position:fixed;top:0;left:0;width:var(--nav);height:100vh;overflow-y:auto;background:var(--cream);border-right:1px solid var(--line);padding:26px 16px 30px;z-index:45}
+.marca{font-family:var(--fh);font-weight:800;font-size:16px;letter-spacing:-.02em;line-height:1.15}
 .marca span{color:var(--red)}
-.marca small{display:block;font-family:var(--fm);font-weight:400;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:7px}
-.anel{display:flex;align-items:center;gap:13px;margin:22px 0 26px;padding:14px;background:var(--white);border:1px solid var(--line);border-radius:10px}
+.marca small{display:block;font-family:var(--fm);font-weight:400;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.anel{display:flex;align-items:center;gap:10px;margin:18px 0 20px;padding:0}
 .anel svg{flex:0 0 auto;transform:rotate(-90deg)}
-.anel .t{font-family:var(--fh);font-weight:800;font-size:15px;line-height:1.25}
-.anel .t i{display:block;font-style:normal;font-family:var(--fm);font-weight:400;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px}
-.parte{font-family:var(--fm);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:24px 0 9px;padding-left:6px;border-left:3px solid var(--line)}
+.anel .t{font-family:var(--fh);font-weight:800;font-size:13.5px;line-height:1.25}
+.anel .t i{display:block;font-style:normal;font-family:var(--fm);font-weight:400;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.parte{font-family:var(--fm);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:20px 0 7px;padding-left:5px;border-left:2px solid var(--line)}
 .parte:first-of-type{margin-top:0}
 #menu ol{list-style:none}
-#menu a{display:flex;gap:9px;align-items:flex-start;padding:8px 10px;border-radius:7px;text-decoration:none;color:var(--ink);font-size:14.5px;line-height:1.35;font-weight:500;transition:background .15s}
-#menu a:hover{background:var(--white)}
+#menu a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:6px;text-decoration:none;color:var(--muted);font-size:13px;line-height:1.35;font-weight:500;transition:background .15s,color .15s}
+#menu a:hover{background:var(--white);color:var(--ink)}
 #menu a.on{background:var(--ink);color:#fff}
-#menu a .em{flex:0 0 auto;font-size:15px;filter:grayscale(.25)}
-#menu a.on .em{filter:none}
+#menu a .em{flex:0 0 auto;font-size:13.5px;filter:grayscale(.45);opacity:.85}
+#menu a.on .em{filter:none;opacity:1}
 #menu a .ok{margin-left:auto;color:var(--green);font-weight:700}
 #menu a.on .ok{color:#8CE0B4}
 #fechar{display:none;position:absolute;top:18px;right:18px;background:none;border:0;font-size:26px;cursor:pointer;color:var(--ink);line-height:1}
 
-/* ---------- menu recolhido (só no computador) ---------- */
-#recolher{position:absolute;top:26px;right:16px;width:30px;height:30px;border:1px solid var(--line);background:var(--white);
-  border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:var(--muted);
-  transition:color .15s,border-color .15s;z-index:2}
-#recolher:hover{color:var(--ink);border-color:var(--ink)}
-#recolher svg{width:15px;height:15px;transition:transform .25s}
-.marca__mini{display:none;font-size:24px;text-align:center;line-height:1}
-
-@media (min-width:1001px){
-  #menu{transition:width .22s ease, padding .22s ease, box-shadow .22s ease}
-  body.recolhido #palco{margin-left:var(--rail);transition:margin-left .22s ease}
-  body.recolhido #menu{overflow-x:hidden;overflow-y:auto;scrollbar-width:none}
-  body.recolhido #menu::-webkit-scrollbar{display:none}
-  /* o estado estreito vale só enquanto o mouse não está nele:
-     passar o mouse ou dar foco pelo teclado já abre de volta */
-  body.recolhido #menu:not(:hover):not(:focus-within){width:var(--rail);padding:24px 10px 68px}
-  body.recolhido #menu:not(:hover):not(:focus-within) .marca,
-  body.recolhido #menu:not(:hover):not(:focus-within) .anel .t,
-  body.recolhido #menu:not(:hover):not(:focus-within) .parte,
-  body.recolhido #menu:not(:hover):not(:focus-within) a .txt,
-  body.recolhido #menu:not(:hover):not(:focus-within) a .ok,
-  body.recolhido #menu:not(:hover):not(:focus-within) .rodapeMenu{display:none}
-  body.recolhido #menu:not(:hover):not(:focus-within) .marca__mini{display:block;margin-bottom:14px}
-  body.recolhido #menu:not(:hover):not(:focus-within) #recolher{position:fixed;top:auto;bottom:22px;left:22px;right:auto;transform:none;box-shadow:0 2px 12px rgba(27,27,27,.16)}
-  body.recolhido #menu:not(:hover):not(:focus-within) #recolher svg{transform:rotate(180deg)}
-  body.recolhido #menu:not(:hover):not(:focus-within) .anel{padding:8px;justify-content:center;margin:0 0 14px}
-  body.recolhido #menu:not(:hover):not(:focus-within) a{justify-content:center;padding:7px 0}
-  body.recolhido #menu:not(:hover):not(:focus-within) a .em{font-size:19px}
-  body.recolhido #menu:hover, body.recolhido #menu:focus-within{box-shadow:14px 0 40px rgba(27,27,27,.14);overflow-y:auto}
-}
-@media (max-width:1000px){ #recolher{display:none} }
-
 /* ---------- palco ---------- */
-#palco{margin-left:var(--nav);padding:56px 7vw 90px;max-width:1180px}
+#palco{margin-left:var(--nav);padding:56px 6vw 90px;max-width:1120px}
 .etapa{display:none;animation:sobe .4s both}
 .etapa.on{display:block}
 @keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -236,9 +204,9 @@ ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;h
 #nomeErro.on{visibility:visible}
 
 /* ---------- assinatura do menu ---------- */
-.rodapeMenu{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
-.rodapeMenu b{display:block;font-family:var(--fh);font-weight:800;color:var(--ink);font-size:14.5px;margin-bottom:3px}
-.rodapeMenu button{background:none;border:0;padding:0;margin-top:11px;display:block;font-family:var(--fb);font-size:13px;color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.rodapeMenu{margin-top:24px;padding-top:15px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+.rodapeMenu b{display:block;font-family:var(--fh);font-weight:800;color:var(--ink);font-size:12.5px;margin-bottom:2px}
+.rodapeMenu button{background:none;border:0;padding:0;margin-top:9px;display:block;font-family:var(--fb);font-size:11.5px;color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 
 @media (max-width:1000px){
   #topo{display:flex} #fechar{display:block}
@@ -292,13 +260,9 @@ ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;h
 
 <aside id="menu">
   <button id="fechar" aria-label="Fechar">×</button>
-  <button id="recolher" type="button" aria-label="Recolher o menu" title="Recolher o menu">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-  </button>
-  <div class="marca__mini" aria-hidden="true">📓</div>
   <div class="marca">Guia da <span>Imersão</span><small>Dia 1 · Construir</small></div>
   <div class="anel">
-    <svg width="46" height="46" viewBox="0 0 46 46"><circle cx="23" cy="23" r="19" fill="none" stroke="#E8E0D8" stroke-width="5"/><circle id="aro" cx="23" cy="23" r="19" fill="none" stroke="#C8441A" stroke-width="5" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>
+    <svg width="38" height="38" viewBox="0 0 46 46"><circle cx="23" cy="23" r="19" fill="none" stroke="#E8E0D8" stroke-width="5"/><circle id="aro" cx="23" cy="23" r="19" fill="none" stroke="#C8441A" stroke-width="5" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>
     <div class="t"><span id="pct">0%</span><i id="pctSub">nada marcado ainda</i></div>
   </div>
   <nav id="nav"></nav>
@@ -1029,23 +993,6 @@ var nav = document.getElementById('nav');
   if(lista) html += '<ol>' + lista + '</ol>';
   nav.innerHTML = html;
 })();
-
-/* ---------- menu recolhido ---------- */
-var CHAVE_MENU = 'guia-imersao:menu';
-var btnRecolher = document.getElementById('recolher');
-function pintarRecolher(){
-  var r = document.body.classList.contains('recolhido');
-  btnRecolher.setAttribute('aria-label', r ? 'Abrir o menu' : 'Recolher o menu');
-  btnRecolher.setAttribute('title',      r ? 'Abrir o menu' : 'Recolher o menu');
-}
-try{ if(localStorage.getItem(CHAVE_MENU) === 'recolhido') document.body.classList.add('recolhido'); }catch(e){}
-pintarRecolher();
-btnRecolher.addEventListener('click', function(){
-  var r = document.body.classList.toggle('recolhido');
-  try{ localStorage.setItem(CHAVE_MENU, r ? 'recolhido' : 'aberto'); }catch(e){}
-  pintarRecolher();
-  btnRecolher.blur();   /* senao o :focus-within segura o menu aberto */
-});
 
 /* ---------- navegacao ---------- */
 var menu = document.getElementById('menu');
