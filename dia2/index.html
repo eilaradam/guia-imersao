@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia da Imersão · Dia 2</title>
+<meta name="description" content="O passo a passo pra você montar, publicar e administrar o seu portfólio com o Claude Code.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📓</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#C8441A; --red-dark:#A3360F; --ink:#1B1B1B; --cream:#FFF8F2; --cream2:#F3EFE9;
+  --line:#E8E0D8; --muted:#5A5550; --white:#fff; --soft:#FFF0E8; --butter:#FEF7CF;
+  --green:#1C7A4E; --green-soft:#E8F5EE;
+  --fh:'Montserrat',Arial,sans-serif; --fb:'DM Sans',Arial,sans-serif; --fm:'DM Mono',ui-monospace,monospace;
+  --nav:252px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:var(--fb);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--red)}
+::selection{background:var(--butter)}
+
+/* ---------- barra do topo (celular) ---------- */
+#topo{position:sticky;top:0;z-index:40;display:none;align-items:center;gap:12px;padding:12px 16px;background:var(--cream);border-bottom:1px solid var(--line)}
+#topo b{font-family:var(--fh);font-weight:800;font-size:15px;flex:1}
+#abrir{background:var(--ink);color:#fff;border:0;border-radius:6px;padding:9px 13px;font-family:var(--fh);font-weight:700;font-size:13px;cursor:pointer}
+#barraMini{position:fixed;top:0;left:0;height:3px;background:var(--red);width:0;z-index:50;transition:width .3s}
+
+/* ---------- menu lateral ---------- */
+#menu{position:fixed;top:0;left:0;width:var(--nav);height:100vh;overflow-y:auto;background:var(--cream);border-right:1px solid var(--line);padding:26px 16px 30px;z-index:45}
+.marca{font-family:var(--fh);font-weight:800;font-size:16px;letter-spacing:-.02em;line-height:1.15}
+.marca span{color:var(--red)}
+.marca small{display:block;font-family:var(--fm);font-weight:400;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.anel{display:flex;align-items:center;gap:10px;margin:18px 0 20px;padding:0}
+.anel svg{flex:0 0 auto;transform:rotate(-90deg)}
+.anel .t{font-family:var(--fh);font-weight:800;font-size:13.5px;line-height:1.25}
+.anel .t i{display:block;font-style:normal;font-family:var(--fm);font-weight:400;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.parte{font-family:var(--fm);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:20px 0 7px;padding-left:5px;border-left:2px solid var(--line)}
+.parte:first-of-type{margin-top:0}
+#menu ol{list-style:none}
+#menu a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:6px;text-decoration:none;color:var(--muted);font-size:13px;line-height:1.35;font-weight:500;transition:background .15s,color .15s}
+#menu a:hover{background:var(--white);color:var(--ink)}
+#menu a.on{background:var(--ink);color:#fff}
+#menu a .em{flex:0 0 auto;font-size:13.5px;filter:grayscale(.45);opacity:.85}
+#menu a.on .em{filter:none;opacity:1}
+#menu a .ok{margin-left:auto;color:var(--green);font-weight:700}
+#menu a.on .ok{color:#8CE0B4}
+#fechar{display:none;position:absolute;top:18px;right:18px;background:none;border:0;font-size:26px;cursor:pointer;color:var(--ink);line-height:1}
+
+/* ---------- palco ---------- */
+#palco{margin-left:var(--nav);padding:56px 6vw 90px;max-width:1120px}
+.etapa{display:none;animation:sobe .4s both}
+.etapa.on{display:block}
+@keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.cab{border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:34px}
+.trilha{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.trilha .n{background:var(--red);color:#fff;border-radius:4px;padding:3px 8px;letter-spacing:.08em}
+.trilha .hora{background:var(--butter);color:var(--red-dark);border-radius:4px;padding:3px 8px}
+h1{font-family:var(--fh);font-weight:900;font-size:clamp(30px,4.6vw,50px);line-height:1.04;letter-spacing:-.025em}
+.sub{margin-top:14px;font-size:clamp(17px,1.9vw,21px);color:var(--muted);max-width:60ch}
+
+h2.bloco{font-family:var(--fh);font-weight:800;font-size:clamp(19px,2.2vw,25px);letter-spacing:-.015em;margin:44px 0 16px;display:flex;align-items:center;gap:10px}
+h2.bloco::before{content:"";width:22px;height:4px;background:var(--red);border-radius:2px;flex:0 0 auto}
+h3{font-family:var(--fh);font-weight:800;font-size:18px;line-height:1.25}
+p{margin:14px 0;max-width:66ch}
+strong{font-weight:700}
+em{font-style:normal;background:var(--butter);padding:1px 5px;border-radius:3px}
+
+/* ---------- passos ---------- */
+.passos{list-style:none;counter-reset:ps;margin:18px 0;display:grid;gap:14px}
+.passos>li{counter-increment:ps;position:relative;padding:18px 20px 18px 66px;background:var(--white);border:1px solid var(--line);border-radius:10px}
+.passos>li::before{content:counter(ps);position:absolute;left:20px;top:16px;width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:14px}
+.passos>li b{display:block;font-family:var(--fh);font-weight:800;font-size:17px;margin-bottom:4px}
+.passos>li p{margin:0;font-size:16px;color:var(--muted)}
+
+/* ---------- cards ---------- */
+.cards{display:grid;gap:16px;margin:20px 0}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:20px}
+.card .rot{font-family:var(--fm);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.card h3{margin-bottom:7px}
+.card p{margin:0;font-size:15.5px;color:var(--muted)}
+.card.forte{border:2px solid var(--red)}
+.card.escuro{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card.escuro p{color:rgba(255,255,255,.78)}
+.card.escuro .rot{color:#FF9166}
+
+/* ---------- avisos ---------- */
+.aviso,.dica,.certo{border-radius:10px;padding:18px 20px 18px 54px;position:relative;margin:22px 0;font-size:16px}
+.aviso p,.dica p,.certo p{margin:8px 0 0;max-width:none}
+.aviso>b,.dica>b,.certo>b{font-family:var(--fh);font-weight:800;font-size:16.5px}
+.aviso::before,.dica::before,.certo::before{position:absolute;left:19px;top:17px;font-size:19px;line-height:1}
+.aviso{background:var(--soft);border:1px solid #F3C7B3}
+.aviso::before{content:"⚠️"}
+.dica{background:var(--butter);border:1px solid #EDDF9A}
+.dica::before{content:"💡"}
+.certo{background:var(--green-soft);border:1px solid #BBE3CD}
+.certo::before{content:"✅"}
+
+/* ---------- prompt ---------- */
+.prompt{background:var(--ink);border-radius:10px;overflow:hidden;margin:20px 0}
+.prompt .top{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#000;color:#fff}
+.prompt .top .lbl{font-family:var(--fm);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#FF9166;flex:1}
+.prompt .top button{background:var(--red);color:#fff;border:0;border-radius:6px;padding:8px 15px;font-family:var(--fh);font-weight:700;font-size:13px;cursor:pointer;transition:background .15s}
+.prompt .top button:hover{background:var(--red-dark)}
+.prompt .top button.feito{background:var(--green)}
+.prompt pre{margin:0;padding:20px;color:#F2ECE6;font-family:var(--fm);font-size:14.5px;line-height:1.62;white-space:pre-wrap;word-break:break-word;max-height:none}
+.prompt pre mark{background:rgba(255,145,102,.2);color:#FFB08C;padding:1px 4px;border-radius:3px}
+
+/* ---------- telinha (navegador de mentira) ---------- */
+.telinha{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--white);margin:20px 0;box-shadow:0 3px 0 rgba(27,27,27,.06)}
+.telinha .barra{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--cream2);border-bottom:1px solid var(--line)}
+.telinha .barra i{width:10px;height:10px;border-radius:50%;background:#D8CFC6;display:block}
+.telinha .barra span{margin-left:10px;flex:1;background:var(--white);border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-family:var(--fm);font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.telinha .corpo{padding:22px}
+.telinha .legenda{padding:11px 16px;background:var(--cream2);border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.fk{display:block;background:var(--cream2);border-radius:4px;height:11px;margin-bottom:8px}
+.fk.t{height:22px;background:var(--ink);width:56%;margin-bottom:13px}
+.fk.m{width:82%}.fk.s{width:44%}
+.fkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:16px}
+.fkv{aspect-ratio:9/16;border-radius:6px;background:linear-gradient(160deg,#F0D9CD,#E3BCA8);display:flex;align-items:center;justify-content:center;font-size:20px;color:rgba(27,27,27,.4)}
+.fkb{display:inline-block;background:var(--red);color:#fff;border-radius:5px;padding:7px 15px;font-family:var(--fh);font-weight:700;font-size:13px;margin-top:15px}
+.fklinha{display:flex;gap:9px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.fklinha b{font-family:var(--fh);font-weight:700}
+.fklinha .tag{font-family:var(--fm);font-size:10.5px;background:var(--butter);border-radius:3px;padding:2px 7px;margin-left:auto;white-space:nowrap}
+
+/* ---------- diagrama ---------- */
+.diagrama{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center;margin:24px 0}
+.peca{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:20px 16px;text-align:center}
+.peca.meio{border:2px solid var(--red)}
+.peca .onde{font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.peca .ic{font-size:27px;display:block;margin-bottom:8px}
+.peca h3{font-size:17px;margin-bottom:5px}
+.peca p{margin:0;font-size:14px;color:var(--muted)}
+.seta{font-family:var(--fh);font-weight:900;font-size:24px;color:var(--red)}
+
+/* ---------- comparacao ---------- */
+.versus{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+.versus>div{border-radius:10px;padding:20px}
+.versus .ruim{background:var(--cream2);border:1px solid var(--line)}
+.versus .bom{background:var(--ink);color:#fff}
+.versus .rot{font-family:var(--fm);font-size:11px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:11px}
+.versus .ruim .rot{color:var(--muted)}
+.versus .bom .rot{color:#FF9166}
+.versus q{font-size:16px;line-height:1.5;display:block}
+
+/* ---------- checkpoint ---------- */
+.check{background:var(--white);border:2px solid var(--ink);border-radius:11px;padding:22px 24px;margin:30px 0}
+.check .rot{font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:5px}
+.check h3{margin-bottom:14px;font-size:20px}
+.check label{display:flex;gap:12px;align-items:flex-start;padding:9px 0;cursor:pointer;font-size:16.5px;border-top:1px solid var(--line)}
+.check label:first-of-type{border-top:0}
+.check input{appearance:none;flex:0 0 auto;width:23px;height:23px;border:2px solid var(--ink);border-radius:5px;cursor:pointer;position:relative;margin-top:1px;transition:background .15s}
+.check input:checked{background:var(--green);border-color:var(--green)}
+.check input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
+.check input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.check label:has(input:checked){color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(27,27,27,.25)}
+
+/* ---------- lista simples ---------- */
+ul.pontos{list-style:none;margin:16px 0;display:grid;gap:11px}
+ul.pontos li{position:relative;padding-left:26px;max-width:66ch}
+ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--red)}
+
+/* ---------- rodape de navegacao ---------- */
+.nav{display:flex;gap:12px;margin-top:56px;padding-top:26px;border-top:1px solid var(--line)}
+.nav button{flex:1;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:16px 18px;text-align:left;cursor:pointer;font-family:var(--fb);transition:border-color .15s}
+.nav button:hover{border-color:var(--ink)}
+.nav button:disabled{opacity:.35;cursor:default}
+.nav button .r{display:block;font-family:var(--fm);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.nav button .n{font-family:var(--fh);font-weight:800;font-size:16px}
+.nav button.frente{background:var(--ink);color:#fff;border-color:var(--ink);text-align:right}
+.nav button.frente .r{color:#FF9166}
+
+/* ---------- toast ---------- */
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,120%);background:var(--ink);color:#fff;padding:13px 22px;border-radius:9px;font-family:var(--fh);font-weight:700;font-size:14.5px;z-index:90;transition:transform .3s}
+#toast.on{transform:translate(-50%,0)}
+
+/* ---------- porteira ---------- */
+#portao{position:fixed;inset:0;z-index:100;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:24px}
+#portao.fora{display:none}
+.portao__caixa{background:var(--cream);border-radius:14px;padding:clamp(30px,5vw,46px) clamp(24px,4vw,42px);max-width:500px;width:100%;text-align:center}
+.portao__selo{font-family:var(--fm);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:13px}
+.portao__caixa h1{font-size:clamp(30px,6vw,44px);margin-bottom:12px}
+.portao__caixa p{margin:0 auto;color:var(--muted);font-size:16.5px;max-width:36ch}
+#portaoForm{display:flex;gap:10px;margin-top:26px}
+#portaoForm input{flex:1;min-width:0;border:2px solid var(--ink);border-radius:9px;padding:14px 16px;font-family:var(--fb);font-size:16px;background:var(--white)}
+#portaoForm input:focus{outline:3px solid var(--red);outline-offset:1px}
+#portaoForm button{background:var(--red);color:#fff;border:0;border-radius:9px;padding:14px 26px;font-family:var(--fh);font-weight:800;font-size:15px;cursor:pointer}
+#portaoForm button:hover{background:var(--red-dark)}
+#portaoErro{visibility:hidden;color:var(--red);font-weight:600;font-size:15px;margin-top:15px}
+#portaoErro.on{visibility:visible}
+.portao__dica{margin-top:20px;font-size:14px}
+.portao__campos{display:grid;gap:10px;margin-top:26px}
+.portao__campos input{width:100%;min-width:0;border:2px solid var(--ink);border-radius:9px;padding:14px 16px;font-family:var(--fb);font-size:16px;background:var(--white)}
+.portao__campos input:focus{outline:3px solid var(--red);outline-offset:1px}
+.portao__campos button{background:var(--red);color:#fff;border:0;border-radius:9px;padding:15px 26px;font-family:var(--fh);font-weight:800;font-size:15px;cursor:pointer;margin-top:4px}
+.portao__campos button:hover{background:var(--red-dark)}
+#nomeErro{visibility:hidden;color:var(--red);font-weight:600;font-size:15px;margin-top:15px}
+#nomeErro.on{visibility:visible}
+
+/* ---------- assinatura do menu ---------- */
+.rodapeMenu{margin-top:24px;padding-top:15px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+.rodapeMenu b{display:block;font-family:var(--fh);font-weight:800;color:var(--ink);font-size:12.5px;margin-bottom:2px}
+.rodapeMenu button{background:none;border:0;padding:0;margin-top:9px;display:block;font-family:var(--fb);font-size:11.5px;color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+@media (max-width:1000px){
+  #topo{display:flex} #fechar{display:block}
+  #menu{transform:translateX(-102%);transition:transform .28s;width:min(330px,88vw);box-shadow:0 0 0 100vw rgba(27,27,27,0)}
+  #menu.aberto{transform:none;box-shadow:0 0 0 100vw rgba(27,27,27,.45)}
+  #palco{margin-left:0;padding:30px 20px 70px}
+  .c2,.c3,.c4,.versus{grid-template-columns:1fr}
+  .diagrama{grid-template-columns:1fr}
+  .seta{transform:rotate(90deg);text-align:center}
+  .fkgrid{grid-template-columns:repeat(3,1fr)}
+  .nav{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{#menu,#topo,.nav,#toast,#portao{display:none}#palco{margin:0}.etapa{display:block!important;page-break-after:always}}
+</style>
+</head>
+<body>
+
+<div id="portao">
+  <div class="portao__caixa">
+    <div id="passoSenha">
+      <div class="portao__selo">Imersão Claude pra Creator</div>
+      <h1>Sua apostila</h1>
+      <p>Todo o passo a passo do Dia 2, com os prompts prontos. Digite a palavra que eu falei na aula.</p>
+      <form id="portaoForm">
+        <input id="senha" type="text" autocomplete="off" placeholder="a palavra da aula" aria-label="senha">
+        <button type="submit">Entrar</button>
+      </form>
+      <p id="portaoErro">Não é essa. Tenta de novo 💛</p>
+      <p class="portao__dica">Esqueceu? Me chama no direct: <strong>@eilaradam</strong></p>
+    </div>
+    <div id="passoNome" hidden>
+      <div class="portao__selo">Preencha para ter acesso</div>
+      <h1>Bem-vinda à apostila!</h1>
+      <p>Essa é a sua apostila do Dia 2: encontrar marcas, escrever a proposta e enviar.</p>
+      <form id="nomeForm" class="portao__campos" novalidate>
+        <input id="campoNome"   type="text"  autocomplete="name"  placeholder="Seu nome completo" aria-label="Seu nome completo">
+        <input id="campoEmail"  type="email" autocomplete="email" placeholder="Seu melhor e-mail" aria-label="Seu e-mail">
+        <input id="campoArroba" type="text"  autocomplete="off"   placeholder="@ do seu Instagram" aria-label="Seu Instagram">
+        <input id="campoZap"    type="tel"   autocomplete="tel"   placeholder="Seu WhatsApp com DDD" aria-label="Seu WhatsApp">
+        <button type="submit">Entrar na apostila</button>
+      </form>
+      <p id="nomeErro">Preenche tudo, por favor 💛</p>
+      <p class="portao__dica">É um pré-cadastro rápido, e é o que garante o seu acesso durante e depois da aula.</p>
+    </div>
+  </div>
+</div>
+
+<div id="barraMini"></div>
+<div id="topo"><button id="abrir">☰ Etapas</button><b id="tituloTopo">Guia da Imersão · Dia 2</b></div>
+
+<aside id="menu">
+  <button id="fechar" aria-label="Fechar">×</button>
+  <div class="marca">Guia da <span>Imersão</span><small>Dia 2 · Prospectar</small></div>
+  <div class="anel">
+    <svg width="38" height="38" viewBox="0 0 46 46"><circle cx="23" cy="23" r="19" fill="none" stroke="#E8E0D8" stroke-width="5"/><circle id="aro" cx="23" cy="23" r="19" fill="none" stroke="#C8441A" stroke-width="5" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>
+    <div class="t"><span id="pct">0%</span><i id="pctSub">nada marcado ainda</i></div>
+  </div>
+  <nav id="nav"></nav>
+  <div class="rodapeMenu">
+    <b>@eilaradam</b>
+    Imersão Claude pra Creator · Dia 2
+    <button id="pdf">Salvar em PDF</button>
+    <button id="zerar">Recomeçar do zero</button>
+  </div>
+</aside>
+
+<main id="palco">
+<!-- ====== 1 ====== -->
+<section class="etapa" id="e1" data-parte="Preparar" data-em="🧭" data-nome="Como usar este guia">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 01</span><span>Preparar</span><span class="hora">9h</span></div>
+    <h1>Ontem você construiu.<br>Hoje ele sai pra trabalhar.</h1>
+    <p class="sub">O Dia 1 terminou com o seu portfólio e o seu admin no ar. Esse guia é o do Dia 2: encontrar marcas de verdade, escrever a proposta e enviar. São 16 etapas, na mesma ordem da aula.</p>
+  </div>
+
+  <h2 class="bloco">Onde você chega no fim</h2>
+  <div class="cards c3">
+    <div class="card"><div class="rot">Até o meio-dia</div><h3>🔎 30 marcas</h3><p>Uma lista com @, link do produto, e-mail e o nome de quem decide. Encontradas por você, hoje.</p></div>
+    <div class="card"><div class="rot">Até as 15h</div><h3>🗂️ Tudo salvo no admin</h3><p>A aba Marcas, com status de cada uma. Nada de print no celular e bloco de notas.</p></div>
+    <div class="card forte"><div class="rot">Até as 17h</div><h3>🚀 Proposta enviada</h3><p>Um e-mail escrito na sua voz, disparado pra dezenas de marcas com um clique.</p></div>
+  </div>
+
+  <h2 class="bloco">Como usar</h2>
+  <ul class="passos">
+    <li><b>Siga na ordem</b><p>Cada etapa usa o que a anterior produziu. A lista vira base, a base vira e-mail, o e-mail vira envio.</p></li>
+    <li><b>Cada etapa tem três partes</b><p>O que fazer, o prompt pronto pra copiar, e o que você deve ver na tela depois.</p></li>
+    <li><b>Marque os checkpoints</b><p>Ficam salvos no seu navegador. Fecha, volta amanhã e continua de onde parou.</p></li>
+    <li><b>Hoje tem dois lugares</b><p>De manhã você usa o Claude no navegador. De tarde, o Claude Code, igual ontem. Cada prompt diz onde ele vai.</p></li>
+  </ul>
+
+  <div class="dica"><b>Deixa três abas abertas</b>
+    <p>Esse guia numa aba, o Claude na outra e o seu admin na terceira. É esse o ritmo do dia.</p>
+  </div>
+
+  <div class="check" data-check="e1">
+    <div class="rot">Checkpoint · antes de começar</div>
+    <h3>O que precisa estar de pé</h3>
+    <label><input type="checkbox"> Meu portfólio está no ar e eu tenho o link</label>
+    <label><input type="checkbox"> Meu admin abre e eu consigo entrar</label>
+    <label><input type="checkbox"> Estou com o Chrome aberto</label>
+    <label><input type="checkbox"> Salvei essa apostila nos favoritos</label>
+  </div>
+</section>
+
+<!-- ====== 2 ====== -->
+<section class="etapa" id="e2" data-parte="Preparar" data-em="🌐" data-nome="O Claude no Chrome">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 02</span><span>Preparar</span><span class="hora">9h30</span></div>
+    <h1>O Claude dentro do navegador enxerga a mesma tela que você.</h1>
+    <p class="sub">Você abre a página, clica no ícone dele e pede do mesmo jeito que pediria no chat. Ele pesquisa, abre link, lê a página e monta a lista, sem você copiar e colar nada.</p>
+  </div>
+
+  <h2 class="bloco">Três lugares, três trabalhos</h2>
+  <div class="cards c3">
+    <div class="card"><div class="rot">Porta 1</div><h3>💬 Claude no chat</h3><p>Pra pensar, escrever legenda e revisar roteiro. Tudo acontece dentro da conversa.</p></div>
+    <div class="card forte"><div class="rot">Porta 2 · a manhã de hoje</div><h3>🌐 Claude no Chrome</h3><p>Pra ir atrás de coisa na internet: procurar marca, ler site, achar contato, montar lista.</p></div>
+    <div class="card"><div class="rot">Porta 3 · a tarde de hoje</div><h3>🛠️ Claude Code</h3><p>Pra mexer nos arquivos e publicar. Foi o dia de ontem e volta hoje no seu admin.</p></div>
+  </div>
+
+  <h2 class="bloco">Instalar, em quatro passos</h2>
+  <ul class="passos">
+    <li><b>Abre o Chrome logado na sua conta</b><p>A mesma que você usa todo dia.</p></li>
+    <li><b>Procura a extensão do Claude para Chrome e adiciona</b><p>É a extensão oficial da Anthropic, a mesma empresa do Claude.</p></li>
+    <li><b>Entra com a mesma conta do Claude da aula</b><p>Se pedir permissão pra ver as páginas, é isso mesmo que faz ele funcionar.</p></li>
+    <li><b>Fixa o ícone na barra</b><p>Assim ele fica sempre à vista, no canto de cima.</p></li>
+  </ul>
+
+  <h2 class="bloco">Como funciona</h2>
+  <div class="diagrama">
+    <div class="peca"><span class="ic">🗣️</span><h3>Você pede</h3><p>Do jeito que fala, igual no chat</p></div>
+    <div class="seta">→</div>
+    <div class="peca meio"><span class="ic">📋</span><h3>Ele mostra o plano</h3><p>O que vai abrir e procurar</p></div>
+    <div class="seta">→</div>
+    <div class="peca"><span class="ic">✅</span><h3>Você autoriza</h3><p>E vê as abas abrindo sozinhas</p></div>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · testar se está funcionando · no Chrome</span><button class="copiar">Copiar</button></div>
+    <pre>Olha essa página que está aberta e me diz, em duas frases, que empresa é essa e o que ela vende.</pre>
+  </div>
+
+  <div class="aviso"><b>Onde tem dinheiro, você faz com a sua mão</b>
+    <p>Banco, cartão, compra e checkout não. Pesquisa sim, comprar não. E leia o que ele diz que vai fazer antes de clicar em sim, não sai autorizando no automático.</p>
+  </div>
+
+  <div class="certo"><b>Se a extensão não abrir na sua conta, nada se perde</b>
+    <p>Todos os prompts de hoje funcionam no chat normal do Claude, com a pesquisa ligada. Muda o lugar onde você cola, não o que você pede.</p>
+  </div>
+
+  <div class="check" data-check="e2">
+    <div class="rot">Checkpoint</div>
+    <h3>O Claude está no meu navegador</h3>
+    <label><input type="checkbox"> O ícone dele aparece na barra do Chrome</label>
+    <label><input type="checkbox"> Entrei com a minha conta</label>
+    <label><input type="checkbox"> Fiz o teste acima e ele descreveu a página certa</label>
+  </div>
+</section>
+
+<!-- ====== 3 ====== -->
+<section class="etapa" id="e3" data-parte="Preparar" data-em="🎯" data-nome="Quem você vai procurar">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 03</span><span>Preparar</span><span class="hora">10h</span></div>
+    <h1>Antes de procurar, decidir quem procurar.</h1>
+    <p class="sub">Busca boa começa com filtro. São três, e você pode combinar: nicho, produto e cidade.</p>
+  </div>
+
+  <div class="cards c3">
+    <div class="card"><div class="rot">Filtro 1</div><h3>🏷️ Nicho</h3><p>Casa e decoração, beleza, pet, maternidade, moda, tecnologia, comida. O que você já gosta de mostrar.</p></div>
+    <div class="card forte"><div class="rot">Filtro 2 · o meu preferido</div><h3>📦 Produto</h3><p>Um produto que a sua vida precisa agora. Eu estou reformando a casa, então fui atrás de fogão de indução. A próxima meta é geladeira.</p></div>
+    <div class="card"><div class="rot">Filtro 3</div><h3>📍 Cidade</h3><p>Marca perto de você dá visita, gravação presencial e evento. E tem menos creator disputando.</p></div>
+  </div>
+
+  <h2 class="bloco">Por que prospectar o que você precisa funciona tão bem</h2>
+  <ul class="pontos">
+    <li><b>A conversa é verdadeira.</b> "Estou reformando minha cozinha e quero mostrar o fogão de vocês" é um e-mail que a marca lê até o fim.</li>
+    <li><b>O vídeo sai melhor.</b> Você usa de verdade, na sua casa, no seu dia. Isso aparece na tela.</li>
+    <li><b>A permuta vale.</b> Receber o produto que você ia comprar é dinheiro que fica no seu bolso. Receber o que você não usa, não.</li>
+  </ul>
+
+  <h2 class="bloco">Tamanho da marca</h2>
+  <div class="versus">
+    <div class="ruim">
+      <div class="rot">Marca gigante</div>
+      <q>Agência no meio, verba fechada com meses de antecedência, fila de creator e resposta que não vem.</q>
+    </div>
+    <div class="bom">
+      <div class="rot">Marca até 50 mil seguidores</div>
+      <q>Quem lê o e-mail é quem decide. Testa rápido, topa primeiro trabalho e cresce junto com você.</q>
+    </div>
+  </div>
+
+  <div class="dica"><b>Escreve a sua ficha de busca agora</b>
+    <p>Três nichos, dois produtos que a sua vida pede nos próximos 3 meses, uma marca dos sonhos e a sua região. É o combustível de todos os prompts das próximas etapas.</p>
+  </div>
+
+  <div class="check" data-check="e3">
+    <div class="rot">Checkpoint</div>
+    <h3>Minha ficha de busca está pronta</h3>
+    <label><input type="checkbox"> Escrevi 3 nichos</label>
+    <label><input type="checkbox"> Escrevi 2 produtos que eu preciso agora</label>
+    <label><input type="checkbox"> Escrevi 1 marca dos sonhos</label>
+    <label><input type="checkbox"> Decidi a faixa de tamanho que eu vou procurar</label>
+  </div>
+</section>
+
+<!-- ====== 4 ====== -->
+<section class="etapa" id="e4" data-parte="Encontrar marcas" data-em="🔎" data-nome="Caminho 1: pesquisa no Chrome">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 04</span><span>Encontrar marcas</span><span class="hora">10h20</span></div>
+    <h1>O primeiro caminho é pedir pro Claude procurar por você.</h1>
+    <p class="sub">Todo pedido bom tem cinco partes. Quem entende essas cinco monta qualquer busca depois, pra qualquer nicho.</p>
+  </div>
+
+  <ul class="passos">
+    <li><b>Quem você é</b><p>Criadora de conteúdo UGC, que faz vídeo pra marca.</p></li>
+    <li><b>O que você quer</b><p>Encontrar empresas pra prospectar como cliente.</p></li>
+    <li><b>O filtro</b><p>O produto, o nicho, a faixa de seguidores, a cidade. Sua ficha da etapa 3.</p></li>
+    <li><b>Quantas</b><p>10, 20, 30. Sem número ele traz três e para.</p></li>
+    <li><b>O formato</b><p>Planilha, com as colunas que você pedir, pronta pra baixar.</p></li>
+  </ul>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · marcas de um produto · no Chrome</span><button class="copiar">Copiar</button></div>
+    <pre>Quero encontrar empresas pra prospectar como cliente do meu trabalho de UGC, criando vídeo pra marca.
+
+Meu foco: empresas que vendam ou produzam <mark>fogão de indução de duas bocas</mark>.
+
+Encontre <mark>10</mark> empresas diferentes que tenham esse produto e monte uma planilha com estas colunas:
+nome da empresa · link do produto · link do Instagram · quantidade de seguidores · e-mail do responsável ou do setor de marketing · outro contato, como WhatsApp · observações suas sobre a marca.
+
+Se você não encontrar o e-mail, escreve "não encontrado". Não invente contato.
+
+Me manda a planilha pronta pra baixar.</pre>
+  </div>
+
+  <div class="aviso"><b>A linha do "não invente contato" não é enfeite</b>
+    <p>Sem ela, ele preenche a planilha com e-mail que parece certo e não existe. E-mail que volta com erro suja o seu envio inteiro.</p>
+  </div>
+
+  <h2 class="bloco">Enquanto ele trabalha, abre a próxima aba</h2>
+  <p>Não fica olhando a tela carregar. Enquanto ele procura numa aba, você já pede as marcas de outro caminho na outra. Três pesquisas ao mesmo tempo, uma pessoa só tocando.</p>
+
+  <h2 class="bloco">Antes de confiar na lista</h2>
+  <ul class="pontos">
+    <li><b>O Instagram existe</b> e postou nos últimos 30 dias.</li>
+    <li><b>O e-mail tem cara de real</b>, e é de pessoa ou de marketing, não de suporte técnico.</li>
+    <li><b>A marca vende no Brasil</b> e entrega na sua região.</li>
+    <li><b>O link do produto abre</b> e é o produto certo.</li>
+  </ul>
+
+  <div class="check" data-check="e4">
+    <div class="rot">Checkpoint</div>
+    <h3>Minha primeira lista existe</h3>
+    <label><input type="checkbox"> Rodei o prompt com o meu produto</label>
+    <label><input type="checkbox"> Baixei a planilha</label>
+    <label><input type="checkbox"> Conferi e apaguei as linhas que não servem</label>
+    <label><input type="checkbox"> Sobraram pelo menos 8 marcas boas</label>
+  </div>
+</section>
+
+<!-- ====== 5 ====== -->
+<section class="etapa" id="e5" data-parte="Encontrar marcas" data-em="📸" data-nome="Caminho 2: Instagram">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 05</span><span>Encontrar marcas</span><span class="hora">10h50</span></div>
+    <h1>O Instagram só te mostra o que ele já decidiu te mostrar.</h1>
+    <p class="sub">Procurando na mão, você cai sempre nas marcas que já te seguem e nas que todas as creators já abordaram. Pedindo pro Claude, ele procura no Google e traz marca nova.</p>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · marcas pequenas de um nicho · no Chrome</span><button class="copiar">Copiar</button></div>
+    <pre>Quero fechar parceria com marcas que vendam <mark>produtos de decoração pra casa: velas, quadros, vasos e enfeite de mesa</mark>.
+
+Encontre marcas brasileiras com <mark>até 50 mil seguidores</mark> no Instagram. Prefiro marcas novas, que estão começando a aparecer.
+
+Me traz <mark>20</mark> marcas, em lista, com:
+@ do perfil · link do Instagram · quantos seguidores · o que ela vende · se ela já postou vídeo feito por creator · e-mail ou forma de contato que estiver no perfil ou no site.
+
+Não repete marca grande e conhecida, o foco é quem está crescendo agora.</pre>
+  </div>
+
+  <h2 class="bloco">Abre o perfil e olha estas cinco coisas</h2>
+  <ul class="passos">
+    <li><b>Posta com frequência?</b><p>Marca parada há três meses não tem verba nem equipe.</p></li>
+    <li><b>Tem loja online ou vende só por DM?</b><p>Isso muda o tipo de vídeo que você vai oferecer.</p></li>
+    <li><b>Os vídeos dela são caseiros?</b><p>Então o seu trabalho resolve uma dor que está visível no feed.</p></li>
+    <li><b>Já postou creator marcando?</b><p>Se já, ela entende o formato e já tem verba. Seu caminho é mais curto.</p></li>
+    <li><b>Tem e-mail no perfil?</b><p>Anota junto com o @. Você vai usar os dois.</p></li>
+  </ul>
+
+  <div class="dica"><b>Marca que nunca postou creator não é marca ruim</b>
+    <p>Ela só precisa de mais explicação. No e-mail, mostra o antes e depois: o vídeo caseiro que ela posta hoje e o que você entrega.</p>
+  </div>
+
+  <div class="check" data-check="e5">
+    <div class="rot">Checkpoint</div>
+    <h3>Peguei marcas no Instagram</h3>
+    <label><input type="checkbox"> Rodei o prompt com o meu nicho</label>
+    <label><input type="checkbox"> Abri os perfis e fiz as cinco checagens</label>
+    <label><input type="checkbox"> Anotei o @ e o contato de cada uma</label>
+  </div>
+</section>
+
+<!-- ====== 6 ====== -->
+<section class="etapa" id="e6" data-parte="Encontrar marcas" data-em="💼" data-nome="Caminho 3: LinkedIn">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 06</span><span>Encontrar marcas</span><span class="hora">11h10</span></div>
+    <h1>O LinkedIn é onde as empresas estão, e onde está quem decide.</h1>
+    <p class="sub">Eu prospecto mais por e-mail, mas tenho aluna fechando cliente por LinkedIn, inclusive fora do Brasil. Pra quem está começando, vale demais.</p>
+  </div>
+
+  <div class="versus">
+    <div class="ruim">
+      <div class="rot">Falar com o dono</div>
+      <q>Em empresa média ele está longe do dia a dia de conteúdo e já tem gente pra isso. Seu recado morre ali.</q>
+    </div>
+    <div class="bom">
+      <div class="rot">Falar com o marketing</div>
+      <q>Analista, coordenador ou gerente de marketing. É quem contrata creator e quem tem a verba na mão.</q>
+    </div>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · a pessoa certa dentro da empresa · no Chrome</span><button class="copiar">Copiar</button></div>
+    <pre>Estou procurando novos clientes pra oferecer meu trabalho como criadora de conteúdo UGC.
+
+Encontre no LinkedIn pessoas responsáveis pelo marketing de empresas brasileiras do nicho de <mark>tecnologia e aplicativos</mark>.
+
+Me traz <mark>15</mark> pessoas, com:
+nome · cargo · empresa · link do perfil no LinkedIn · Instagram da empresa · e se a empresa já falou alguma coisa sobre UGC ou creator.
+
+Prefiro analista, coordenador ou gerente de marketing, não o dono da empresa.</pre>
+  </div>
+
+  <h2 class="bloco">Como falar lá dentro</h2>
+  <ul class="pontos">
+    <li><b>Convite com nota curta.</b> Duas linhas: quem você é e por que está falando com aquela empresa. Sem proposta no primeiro contato.</li>
+    <li><b>Fala de resultado.</b> Lá o assunto é venda, teste e conversão. Guarda o "eu amo criar conteúdo" pro Instagram.</li>
+    <li><b>Link, nunca anexo.</b> Manda o endereço do portfólio que você publicou ontem.</li>
+  </ul>
+
+  <div class="check" data-check="e6">
+    <div class="rot">Checkpoint</div>
+    <h3>Tenho nomes, não só empresas</h3>
+    <label><input type="checkbox"> Rodei o prompt com o meu nicho</label>
+    <label><input type="checkbox"> Tenho pelo menos 10 pessoas com nome e cargo</label>
+    <label><input type="checkbox"> Salvei o link do perfil de cada uma</label>
+  </div>
+</section>
+
+<!-- ====== 7 ====== -->
+<section class="etapa" id="e7" data-parte="Encontrar marcas" data-em="🛒" data-nome="Caminho 4: listas dos e-commerces">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 07</span><span>Encontrar marcas</span><span class="hora">11h30</span></div>
+    <h1>Os e-commerces publicam a lista das marcas que vendem lá dentro.</h1>
+    <p class="sub">Shopee, Amazon e Mercado Livre têm uma página com centenas de marcas, das gigantes às que ninguém conhece ainda. É lista pronta esperando você.</p>
+  </div>
+
+  <ul class="passos">
+    <li><b>No site da Shopee, procura pela página de marcas</b><p>Ela costuma aparecer como Shopee Brands. Brands é marcas, em inglês.</p></li>
+    <li><b>Abre a lista e escolhe a sua categoria</b><p>Casa, cozinha, beleza, eletrônicos, pet.</p></li>
+    <li><b>Pede pro Claude transformar a lista em contatos</b><p>É o prompt abaixo, com a página aberta na frente dele.</p></li>
+    <li><b>Repete na Amazon e no Mercado Livre</b><p>Cada um tem a sua própria lista de marcas.</p></li>
+  </ul>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · transformar a lista em contatos · no Chrome</span><button class="copiar">Copiar</button></div>
+    <pre>Esta página tem a lista de marcas que vendem neste e-commerce.
+
+Separe as marcas do nicho de <mark>casa e cozinha</mark> e, pra cada uma, procure:
+Instagram · quantos seguidores · site próprio · e-mail de contato ou de marketing · se ela já usa vídeo de creator na página do produto.
+
+Me devolve <mark>20</mark> marcas em planilha, da menor pra maior em seguidores.
+
+Se não achar o contato, escreve "não encontrado".</pre>
+  </div>
+
+  <div class="dica"><b>Esse caminho é ouro pra vídeo de e-commerce</b>
+    <p>Quem vende dentro de marketplace vive de vídeo curto na página do produto e nos anúncios. É o trabalho que estão chamando de clip: direto, feito pra vender, sem campanha grande. Dá volume e dá recorrência.</p>
+  </div>
+
+  <div class="check" data-check="e7">
+    <div class="rot">Checkpoint · meio-dia</div>
+    <h3>A minha lista está fechada</h3>
+    <label><input type="checkbox"> Peguei marcas pelos quatro caminhos</label>
+    <label><input type="checkbox"> Juntei tudo numa planilha só</label>
+    <label><input type="checkbox"> Tenho 30 marcas ou mais</label>
+    <label><input type="checkbox"> Apaguei as repetidas</label>
+  </div>
+</section>
+
+<!-- ====== 8 ====== -->
+<section class="etapa" id="e8" data-parte="Organizar" data-em="🗂️" data-nome="A aba Marcas no seu admin">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 08</span><span>Organizar</span><span class="hora">13h30</span></div>
+    <h1>De nada adianta encontrar 30 marcas e perder a lista em uma semana.</h1>
+    <p class="sub">Ontem o seu admin ganhou a aba Contatos, que guarda quem chega pelo formulário do site. Hoje entra a aba Marcas, que guarda quem você foi buscar.</p>
+  </div>
+
+  <div class="cards c2">
+    <div class="card"><div class="rot">Já existe</div><h3>📬 Contatos</h3><p>As pessoas que preenchem o formulário do seu portfólio. Elas chegam até você.</p></div>
+    <div class="card forte"><div class="rot">Hoje</div><h3>🗂️ Marcas</h3><p>As empresas que você encontrou hoje de manhã, com origem, status e histórico. Você chega até elas.</p></div>
+  </div>
+
+  <h2 class="bloco">O que entra nessa base</h2>
+  <ul class="pontos">
+    <li><b>As marcas de hoje de manhã.</b> Todas, mesmo as que você ainda não decidiu abordar.</li>
+    <li><b>Todo cliente que você já atendeu</b>, mesmo o de um ano atrás.</li>
+    <li><b>Quem pediu orçamento e não fechou.</b> Esse é o mais fácil de reativar.</li>
+    <li><b>Contato que está só no seu WhatsApp</b> e não está em lugar nenhum.</li>
+  </ul>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · criar a aba Marcas · no Claude Code</span><button class="copiar">Copiar</button></div>
+    <pre>Abre a pasta do meu site, a mesma de ontem. Não cria pasta nova.
+
+No meu admin, cria a aba MARCAS, que é a minha base de prospecção.
+
+No Supabase, cria a tabela marcas com: nome, site, instagram, seguidores, e-mail, whatsapp, pessoa de contato, nicho, origem (onde eu encontrei), status, observação e data.
+Liga o RLS: só eu, logada, posso ler, criar, editar e apagar. Sem login ninguém enxerga essa tabela.
+
+Na aba eu quero:
+· adicionar marca na mão
+· importar uma planilha CSV
+· buscar por nome e filtrar por nicho, origem e status
+· mudar o status em um clique: a enviar · enviado · respondeu · proposta · fechado · sem interesse
+· um contador no topo com o total e quantas em cada status
+
+No fim, me explica em português simples como eu importo a planilha.</pre>
+  </div>
+
+  <div class="aviso"><b>RLS de novo, e não é exagero</b>
+    <p>Essa tabela tem o contato de dezenas de empresas. Sem o RLS ligado, qualquer pessoa com a chave pública do seu site alcança ela. Login é a porta, RLS é a tranca.</p>
+  </div>
+
+  <div class="check" data-check="e8">
+    <div class="rot">Checkpoint</div>
+    <h3>A aba nasceu</h3>
+    <label><input type="checkbox"> A aba Marcas aparece no meu admin</label>
+    <label><input type="checkbox"> Consigo adicionar uma marca na mão e ela fica salva</label>
+    <label><input type="checkbox"> Recarreguei a página e ela continua lá</label>
+    <label><input type="checkbox"> Perguntei pro Claude se o RLS está ligado e ele confirmou</label>
+  </div>
+</section>
+
+<!-- ====== 9 ====== -->
+<section class="etapa" id="e9" data-parte="Organizar" data-em="📥" data-nome="Importar a lista e usar o status">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 09</span><span>Organizar</span><span class="hora">14h</span></div>
+    <h1>Agora a planilha de manhã entra no admin.</h1>
+    <p class="sub">É o momento em que a lista para de ser um arquivo perdido e vira a sua base de trabalho.</p>
+  </div>
+
+  <ul class="passos">
+    <li><b>Baixa a planilha em CSV</b><p>Se o Claude te deu em outro formato, pede: "me manda essa mesma planilha em CSV".</p></li>
+    <li><b>Confere as colunas</b><p>Nome, instagram, e-mail e origem são as que importam. As outras podem vir vazias.</p></li>
+    <li><b>Abre a aba Marcas e clica em importar</b><p>Escolhe o arquivo e confirma.</p></li>
+    <li><b>Confere o contador</b><p>Entraram 30? Apaga as repetidas e as que não servem.</p></li>
+  </ul>
+
+  <h2 class="bloco">O caminho que toda marca percorre</h2>
+  <div class="diagrama">
+    <div class="peca"><span class="ic">📝</span><h3>A enviar</h3><p>Está na lista, não recebeu nada</p></div>
+    <div class="seta">→</div>
+    <div class="peca meio"><span class="ic">📤</span><h3>Enviado</h3><p>Recebeu seu e-mail, com data</p></div>
+    <div class="seta">→</div>
+    <div class="peca"><span class="ic">💬</span><h3>Respondeu</h3><p>Agora é conversa e proposta</p></div>
+  </div>
+  <p>O status é o que te diz o que fazer amanhã de manhã, sem você precisar lembrar de nada.</p>
+
+  <div class="dica"><b>Se der erro na importação</b>
+    <p>Copia a mensagem inteira e cola pro Claude: <em>"isso apareceu quando importei, o que é e como arruma?"</em>. Quase sempre é nome de coluna diferente e ele resolve em um pedido.</p>
+  </div>
+
+  <div class="check" data-check="e9">
+    <div class="rot">Checkpoint</div>
+    <h3>Minha base está montada</h3>
+    <label><input type="checkbox"> Importei a planilha e as marcas apareceram</label>
+    <label><input type="checkbox"> Coloquei também os clientes que eu já atendi</label>
+    <label><input type="checkbox"> Consigo mudar o status de uma marca</label>
+    <label><input type="checkbox"> O contador do topo bate com o que eu tenho</label>
+  </div>
+</section>
+
+<!-- ====== 10 ====== -->
+<section class="etapa" id="e10" data-parte="Escrever e enviar" data-em="✍️" data-nome="O e-mail de prospecção">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 10</span><span>Escrever e enviar</span><span class="hora">14h30</span></div>
+    <h1>A marca decide nos primeiros 8 segundos.</h1>
+    <p class="sub">Eu escrevo sempre na mesma ordem, e a parte 2 é a que quase ninguém faz. É ela que faz a marca responder.</p>
+  </div>
+
+  <ul class="passos">
+    <li><b>Quem eu sou e o meu diferencial</b><p>Uma frase. Não é currículo.</p></li>
+    <li><b>Por que estou falando com vocês</b><p>A conexão verdadeira: estou reformando a casa, uso o produto, vi o lançamento.</p></li>
+    <li><b>A ideia de conteúdo</b><p>Já mastigada, pronta pra ela imaginar no feed.</p></li>
+    <li><b>A prova e o convite</b><p>Link do portfólio e uma pergunta fácil de responder.</p></li>
+  </ul>
+
+  <h2 class="bloco">O modelo inteiro</h2>
+  <div class="prompt">
+    <div class="top"><span class="lbl">Modelo · o e-mail que você vai adaptar</span><button class="copiar">Copiar</button></div>
+    <pre>Assunto: ideia de vídeo pro <mark>fogão de indução</mark> da <mark>[marca]</mark>
+
+Oi, [nome]! Sou a [seu nome], criadora de conteúdo UGC. Eu gravo vídeo caseiro de produto, do jeito que a cliente de vocês grava, pra usar no perfil e nos anúncios.
+
+Estou reformando a minha cozinha agora e fui atrás de marca de fogão de indução. Entrei no site de vocês, vi o modelo de duas bocas e ele é exatamente o que cabe no meu espaço.
+
+A ideia: um vídeo de 40 segundos instalando e usando pela primeira vez, na cozinha real, mostrando quanto tempo a água leva pra ferver. Entrego em formato vertical, com e sem legenda, pra vocês usarem no Instagram e na página do produto.
+
+Meus trabalhos estão aqui: [link do seu portfólio]
+
+Faz sentido pra vocês? Eu mando os valores e os formatos.
+[seu nome] · [seu @]</pre>
+  </div>
+
+  <h2 class="bloco">Agora a sua versão, com a sua voz</h2>
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · escrever o seu e-mail · no chat ou no Code</span><button class="copiar">Copiar</button></div>
+    <pre>Escreve o meu e-mail de prospecção pra marca, seguindo esta estrutura:
+1 quem eu sou e o meu diferencial · 2 por que estou falando com essa marca · 3 a ideia de conteúdo pronta · 4 link do portfólio e uma pergunta no fim.
+
+Sobre mim: <mark>[o que você grava, pra que nicho, o que te diferencia, quanto tempo de estrada]</mark>
+Meu portfólio: <mark>[seu link]</mark>
+Meu tom: <mark>[cola aqui uma legenda sua, pra ele escrever do seu jeito]</mark>
+
+Regras: no máximo 150 palavras, sem enrolação, sem "espero que esteja bem", nada de anexo.
+Deixa marcado com chave o que muda em cada marca: {marca}, {pessoa} e {conexao}.
+
+Me entrega três opções de assunto também.</pre>
+  </div>
+
+  <div class="dica"><b>Cola uma legenda sua no campo do tom</b>
+    <p>É isso que faz o e-mail sair com a sua voz e não com voz de robô. A marca sente a diferença na primeira linha.</p>
+  </div>
+
+  <div class="check" data-check="e10">
+    <div class="rot">Checkpoint</div>
+    <h3>Meu e-mail está escrito</h3>
+    <label><input type="checkbox"> Tenho o texto com as quatro partes</label>
+    <label><input type="checkbox"> Ele cabe na tela do celular sem rolar muito</label>
+    <label><input type="checkbox"> Tenho três opções de assunto</label>
+    <label><input type="checkbox"> Li em voz alta e parece comigo</label>
+  </div>
+</section>
+
+<!-- ====== 11 ====== -->
+<section class="etapa" id="e11" data-parte="Escrever e enviar" data-em="🔍" data-nome="Revisar antes de enviar">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 11</span><span>Escrever e enviar</span><span class="hora">15h</span></div>
+    <h1>Seis coisas que fazem a marca fechar o e-mail sem ler.</h1>
+    <p class="sub">Antes de mandar pra cinquenta, passa o seu texto por essa peneira.</p>
+  </div>
+
+  <div class="cards c3">
+    <div class="card"><div class="rot">Erro 1</div><h3>📜 Texto gigante</h3><p>Se não cabe na tela do celular, não é lido. Corta pela metade e corta de novo.</p></div>
+    <div class="card"><div class="rot">Erro 2</div><h3>🪞 Só falar de você</h3><p>Três parágrafos de sonho e paixão. A marca quer saber o que ela ganha.</p></div>
+    <div class="card"><div class="rot">Erro 3</div><h3>📎 Anexo pesado</h3><p>PDF de 20 MB vai pro lixo. Manda o link do portfólio.</p></div>
+    <div class="card"><div class="rot">Erro 4</div><h3>🤷 Sem ideia nenhuma</h3><p>"Quero fazer uma parceria" joga o trabalho de pensar pra ela.</p></div>
+    <div class="card"><div class="rot">Erro 5</div><h3>📋 Copiado e colado</h3><p>Sem o nome da marca e sem a linha de conexão, vira spam na hora.</p></div>
+    <div class="card forte"><div class="rot">Erro 6</div><h3>❓ Sem pergunta no fim</h3><p>Termina com uma pergunta simples de responder. Silêncio também nasce de e-mail sem pedido.</p></div>
+  </div>
+
+  <h2 class="bloco">O assunto decide se abrem</h2>
+  <div class="versus">
+    <div class="ruim">
+      <div class="rot">Não abre</div>
+      <q>"Parceria" · "Proposta comercial" · "Olá, tudo bem?" · "Criadora de conteúdo UGC"</q>
+    </div>
+    <div class="bom">
+      <div class="rot">Abre</div>
+      <q>"Ideia de vídeo pro fogão de indução de vocês" · "Vi o lançamento da linha de velas e tive uma ideia" · "Conteúdo pra Black Friday da [marca]"</q>
+    </div>
+  </div>
+
+  <h2 class="bloco">Em massa sem parecer massa</h2>
+  <p>O corpo é igual pra todas. <b>Só a linha de conexão é dela</b>, e ela sai da coluna de observações que você pediu de manhã. Cinquenta e-mails, cinquenta linhas diferentes, escritas de uma vez.</p>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · uma linha de conexão pra cada marca</span><button class="copiar">Copiar</button></div>
+    <pre>Vou te mandar a minha planilha de marcas, com o nome, o que cada uma vende e as observações.
+
+Pra cada marca, escreve UMA frase de conexão, de no máximo 20 palavras, que eu vou colar no meio do meu e-mail de prospecção. Ela precisa mostrar que eu olhei aquela marca de verdade.
+
+Não usa elogio genérico tipo "amo o trabalho de vocês". Fala do produto, do lançamento, da loja ou do jeito que ela aparece.
+
+Me devolve em duas colunas: marca e frase.</pre>
+  </div>
+
+  <div class="check" data-check="e11">
+    <div class="rot">Checkpoint</div>
+    <h3>O texto está pronto pra sair</h3>
+    <label><input type="checkbox"> Passei pelos seis erros e corrigi o que tinha</label>
+    <label><input type="checkbox"> Escolhi o assunto</label>
+    <label><input type="checkbox"> Tenho uma linha de conexão pra cada marca</label>
+    <label><input type="checkbox"> Mandei o e-mail pra mim mesma e li no celular</label>
+  </div>
+</section>
+
+<!-- ====== 12 ====== -->
+<section class="etapa" id="e12" data-parte="Escrever e enviar" data-em="📮" data-nome="O Resend, o carteiro do site">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 12</span><span>Escrever e enviar</span><span class="hora">15h30</span></div>
+    <h1>O seu admin não sabe mandar e-mail sozinho.</h1>
+    <p class="sub">Ele só sabe mostrar tela. O Resend é o serviço que pega o texto e entrega na caixa de entrada da marca. É o carteiro do seu site.</p>
+  </div>
+
+  <ul class="passos">
+    <li><b>Cria a conta no Resend</b><p>Com o seu e-mail de trabalho. Tem plano gratuito pra começar.</p></li>
+    <li><b>Gera a chave</b><p>Ela aparece uma vez só. Guarda num lugar seguro na hora.</p></li>
+    <li><b>Começa pelo endereço de teste</b><p>Eles te dão um endereço que já funciona. Dá pra mandar hoje mesmo.</p></li>
+    <li><b>Depois, se quiser, liga o seu domínio</b><p>Aí os e-mails saem do seu próprio endereço. Isso mexe no DNS e pode ficar pra depois da aula.</p></li>
+  </ul>
+
+  <h2 class="bloco">Lembra das duas chaves de ontem?</h2>
+  <div class="cards c2">
+    <div class="card"><div class="rot">Pública, do Supabase</div><h3>🔓 Pode ficar no site</h3><p>Ela foi feita pra isso. Quem protege os dados é o RLS, não o segredo dela.</p></div>
+    <div class="card forte"><div class="rot">A do Resend é diferente</div><h3>🔐 Nunca no site</h3><p>Com ela qualquer pessoa manda e-mail no seu nome. Ela vai guardada dentro do Supabase, como segredo, e o seu admin só pede pra ele enviar.</p></div>
+  </div>
+
+  <div class="aviso"><b>Se alguém pedir pra você colar essa chave dentro do site, a resposta é não</b>
+    <p>O prompt da próxima etapa já manda guardar do jeito certo. Não precisa decorar nada, só não mudar isso.</p>
+  </div>
+
+  <div class="check" data-check="e12">
+    <div class="rot">Checkpoint</div>
+    <h3>Tenho carteiro</h3>
+    <label><input type="checkbox"> Criei a conta no Resend</label>
+    <label><input type="checkbox"> Gerei a chave e guardei num lugar seguro</label>
+    <label><input type="checkbox"> Entendi que ela não pode ficar dentro do site</label>
+  </div>
+</section>
+
+<!-- ====== 13 ====== -->
+<section class="etapa" id="e13" data-parte="Escrever e enviar" data-em="🚀" data-nome="A aba Prospecção e o disparo">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 13</span><span>Escrever e enviar</span><span class="hora">15h45</span></div>
+    <h1>Selecionar as marcas, escolher o modelo, apertar um botão.</h1>
+    <p class="sub">Cinquenta e-mails na mão são meio dia de trabalho, e semana que vem você não faz de novo. Pelo admin, são dez minutos, toda semana.</p>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · criar a aba Prospecção · no Claude Code</span><button class="copiar">Copiar</button></div>
+    <pre>No meu admin, cria a aba PROSPECÇÃO, que manda e-mail pras marcas da minha base.
+
+O envio vai pelo Resend. A chave do Resend é secreta: guarda ela como segredo dentro de uma função do Supabase e faz o admin chamar essa função. A chave não pode aparecer no site.
+
+Na aba eu quero:
+· escrever o modelo do e-mail, com assunto e texto, usando {marca}, {pessoa} e {conexao}, que o sistema troca sozinho
+· a lista das minhas marcas com caixinha de seleção e um botão de marcar todas com status "a enviar"
+· um botão de enviar teste só pra mim, antes de tudo
+· o botão de disparar, que manda um de cada vez com uma pausa entre eles
+· depois do envio, marcar a marca como enviado com a data, e me avisar se eu tentar enviar de novo pro mesmo e-mail
+· uma tabela com tudo que saiu: pra quem, quando e se deu erro
+
+Me explica no fim como eu troco o texto do modelo sem mexer no código.</pre>
+  </div>
+
+  <h2 class="bloco">Pra não cair no spam</h2>
+  <ul class="pontos">
+    <li><b>Começa com 10 por dia</b>, não com 200 de uma vez.</li>
+    <li><b>Manda o teste pra você</b> e lê no celular antes.</li>
+    <li><b>Um link só</b> no e-mail, e nenhum anexo.</li>
+    <li><b>Nada de MAIÚSCULA no assunto</b>, nem promessa de promoção.</li>
+    <li><b>Quem pedir pra não receber sai da lista na hora.</b></li>
+    <li><b>E-mail que voltou com erro você apaga</b>, ele suja os próximos envios.</li>
+  </ul>
+
+  <h2 class="bloco">A última conferida, antes de apertar</h2>
+  <div class="certo"><b>Cinco perguntas</b>
+    <p>O teste chegou bonito no celular? O nome da marca e a linha de conexão estão certos? O link do portfólio abre? São marcas que eu quero mesmo atender? O status vai virar enviado sozinho depois?</p>
+  </div>
+
+  <div class="check" data-check="e13">
+    <div class="rot">Checkpoint · 16h</div>
+    <h3>Mandei de verdade</h3>
+    <label><input type="checkbox"> A aba Prospecção está funcionando</label>
+    <label><input type="checkbox"> O teste chegou na minha caixa</label>
+    <label><input type="checkbox"> Disparei pra pelo menos 10 marcas</label>
+    <label><input type="checkbox"> As marcas viraram enviado com a data</label>
+  </div>
+</section>
+
+<!-- ====== 14 ====== -->
+<section class="etapa" id="e14" data-parte="Depois" data-em="📅" data-nome="Depois que o e-mail sai">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 14</span><span>Depois</span><span class="hora">16h30</span></div>
+    <h1>A maioria não responde. Isso não é fracasso, é o jogo.</h1>
+    <p class="sub">Prospecção é volume e repetição. A marca que não respondeu hoje pode responder no terceiro contato, quando a verba nova abrir. Por isso a base existe: pra você não recomeçar do zero toda vez.</p>
+  </div>
+
+  <h2 class="bloco">O segundo e-mail, cinco dias depois</h2>
+  <div class="prompt">
+    <div class="top"><span class="lbl">Modelo · o follow-up, curto</span><button class="copiar">Copiar</button></div>
+    <pre>Assunto: sobre o vídeo pro <mark>[produto]</mark>
+
+Oi, [nome]! Passando rapidinho pra saber se a ideia faz sentido pra vocês.
+
+Se for melhor, eu gravo um teste curto antes de qualquer acordo, pra vocês verem como fica com o produto de vocês na mão.
+
+Qualquer coisa eu fico por aqui. [seu nome]</pre>
+  </div>
+
+  <h2 class="bloco">Quando a marca responde</h2>
+  <ul class="passos">
+    <li><b>Responde no mesmo dia</b><p>Velocidade é metade do fechamento.</p></li>
+    <li><b>Manda dois ou três formatos com valor</b><p>Ela escolhe em vez de dizer não.</p></li>
+    <li><b>Deixa claro o que entrega</b><p>Quantos vídeos, quantos cortes, prazo e direito de uso.</p></li>
+    <li><b>Marca como proposta no admin</b><p>E coloca a data de voltar a falar.</p></li>
+  </ul>
+
+  <h2 class="bloco">A sua semana, daqui pra frente</h2>
+  <div class="cards c4">
+    <div class="card"><div class="rot">Segunda</div><h3>🔎 Encher a lista</h3><p>30 marcas novas com os prompts dessa apostila. 20 minutos.</p></div>
+    <div class="card"><div class="rot">Terça</div><h3>📤 Disparar</h3><p>Seleciona as "a enviar" e manda. 10 minutos.</p></div>
+    <div class="card"><div class="rot">Quinta</div><h3>🔁 Segundo e-mail</h3><p>Quem recebeu semana passada e não respondeu.</p></div>
+    <div class="card forte"><div class="rot">Todo dia</div><h3>💬 Responder</h3><p>Quem respondeu, no mesmo dia. Sempre.</p></div>
+  </div>
+
+  <div class="check" data-check="e14">
+    <div class="rot">Checkpoint</div>
+    <h3>Tenho um plano pra semana</h3>
+    <label><input type="checkbox"> Salvei o modelo do segundo e-mail</label>
+    <label><input type="checkbox"> Marquei na agenda o dia de encher a lista</label>
+    <label><input type="checkbox"> Marquei o dia de disparar</label>
+  </div>
+</section>
+
+<!-- ====== 15 ====== -->
+<section class="etapa" id="e15" data-parte="Depois" data-em="🆘" data-nome="Quando trava">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 15</span><span>Depois</span></div>
+    <h1>Travou? Tenta na ordem.</h1>
+    <p class="sub">A mesma escadinha de ontem, agora com os tropeços que aparecem hoje.</p>
+  </div>
+
+  <ul class="passos">
+    <li><b>Copia a mensagem de erro inteira e cola pro Claude</b><p>"Isso apareceu, o que é e como arruma?"</p></li>
+    <li><b>Ainda travado</b><p>"Volta pra última versão que funcionava e me explica o que mudou."</p></li>
+    <li><b>Ainda travado</b><p>Manda no grupo o print e em que etapa você está.</p></li>
+    <li><b>Nada resolveu hoje</b><p>Está tudo gravado e essa apostila fica no ar. Ninguém fica pra trás.</p></li>
+  </ul>
+
+  <h2 class="bloco">Os quatro tropeços mais comuns de hoje</h2>
+  <div class="cards c2">
+    <div class="card"><div class="rot">Busca</div><h3>Ele trouxe só 3 marcas</h3><p>Faltou dizer quantas. Repete o pedido com o número e o formato de planilha.</p></div>
+    <div class="card"><div class="rot">Contato</div><h3>Os e-mails não existem</h3><p>Faltou a linha "se não achar, escreve não encontrado, não invente contato".</p></div>
+    <div class="card"><div class="rot">Importação</div><h3>A planilha não entra</h3><p>Quase sempre é nome de coluna diferente. Cola o erro pro Claude que ele ajusta.</p></div>
+    <div class="card forte"><div class="rot">Envio</div><h3>O e-mail não sai</h3><p>Confere se a chave do Resend está guardada no Supabase e se o endereço de envio é o que eles te deram.</p></div>
+  </div>
+
+  <div class="dica"><b>Pergunta sempre</b>
+    <p>Quando aparecer qualquer coisa na tela que você não entende: <em>"explica isso como se eu nunca tivesse programado"</em>. Não tem pergunta boba e ele não se cansa.</p>
+  </div>
+
+  <div class="check" data-check="e15">
+    <div class="rot">Checkpoint</div>
+    <h3>Sei o que fazer quando travar</h3>
+    <label><input type="checkbox"> Sei colar o erro pro Claude</label>
+    <label><input type="checkbox"> Sei pedir pra voltar a versão que funcionava</label>
+    <label><input type="checkbox"> Sei onde pedir ajuda</label>
+  </div>
+</section>
+
+<!-- ====== 16 ====== -->
+<section class="etapa" id="e16" data-parte="Depois" data-em="📋" data-nome="Todos os prompts">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 16</span><span>Depois</span></div>
+    <h1>Todos os prompts do Dia 2, num lugar só.</h1>
+    <p class="sub">Pra quando você já souber o que quer e não precisar ler a etapa inteira de novo. Troca o que está marcado e cola.</p>
+  </div>
+  <div id="cofre"></div>
+
+  <div class="dica"><b>Guarda essa página</b>
+    <p>Toda segunda-feira você volta aqui, roda os prompts de busca com um nicho novo e enche a lista de novo. É essa a rotina que traz cliente.</p>
+  </div>
+
+  <h2 class="bloco">Acabou. E agora?</h2>
+  <div class="cards c3">
+    <div class="card forte"><div class="rot">Hoje, antes de dormir</div><h3>📤 Cinco à mão</h3><p>Escolhe as 5 marcas que você mais quer, escreve a linha de conexão de cada uma com carinho e manda. Essas são as suas apostas da semana.</p></div>
+    <div class="card"><div class="rot">Nos próximos dias</div><h3>📬 Responde rápido</h3><p>Quem responder, você responde no mesmo dia. É metade do fechamento.</p></div>
+    <div class="card"><div class="rot">Quando a primeira responder</div><h3>🎉 Conta no grupo</h3><p>A gente quer ver. E serve de coragem pra quem ainda não mandou.</p></div>
+  </div>
+</section>
+
+<nav class="nav" id="navFim"></nav>
+</main>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+var etapas = [].slice.call(document.querySelectorAll('.etapa'));
+var CHAVE = 'guia-imersao-d2:v1';
+var estado = { feitos: {}, ultima: 'e1' };
+
+function ler(){
+  try{ var b = localStorage.getItem(CHAVE); if(b) estado = JSON.parse(b); }catch(e){}
+  if(!estado.feitos) estado.feitos = {};
+}
+function salvar(){
+  try{ localStorage.setItem(CHAVE, JSON.stringify(estado)); }catch(e){}
+}
+/* le AGORA, antes de montar qualquer coisa: o bloco do progresso
+   logo abaixo ja precisa do que estava salvo pra remarcar as caixinhas */
+ler();
+
+/* ---------- menu ---------- */
+var nav = document.getElementById('nav');
+(function montarMenu(){
+  var parteAtual = '', html = '', lista = '';
+  etapas.forEach(function(s, i){
+    var p = s.dataset.parte;
+    if(p !== parteAtual){
+      if(lista) html += '<ol>' + lista + '</ol>';
+      lista = '';
+      html += '<div class="parte">' + p + '</div>';
+      parteAtual = p;
+    }
+    lista += '<li><a href="#' + s.id + '" data-ir="' + s.id + '">' +
+             '<span class="em">' + s.dataset.em + '</span>' +
+             '<span class="txt">' + (i+1) + '. ' + s.dataset.nome + '</span>' +
+             '<span class="ok" data-ok="' + s.id + '"></span></a></li>';
+  });
+  if(lista) html += '<ol>' + lista + '</ol>';
+  nav.innerHTML = html;
+})();
+
+/* ---------- navegacao ---------- */
+var menu = document.getElementById('menu');
+function fecharMenu(){ menu.classList.remove('aberto'); }
+document.getElementById('abrir').onclick = function(){ menu.classList.toggle('aberto'); };
+document.getElementById('fechar').onclick = fecharMenu;
+
+function indice(id){ for(var i=0;i<etapas.length;i++){ if(etapas[i].id===id) return i; } return 0; }
+
+function mostrar(id, semScroll){
+  var i = indice(id);
+  etapas.forEach(function(s,k){ s.classList.toggle('on', k===i); });
+  [].slice.call(nav.querySelectorAll('a')).forEach(function(a){
+    a.classList.toggle('on', a.dataset.ir === etapas[i].id);
+  });
+  document.getElementById('tituloTopo').textContent = (i+1) + '. ' + etapas[i].dataset.nome;
+  montarRodape(i);
+  estado.ultima = etapas[i].id; salvar(); agendarSync();
+  fecharMenu();
+  if(!semScroll) window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  if(location.hash !== '#' + etapas[i].id) history.replaceState(null,'','#'+etapas[i].id);
+}
+
+var navFim = document.getElementById('navFim');
+function montarRodape(i){
+  var h = '';
+  if(i > 0){
+    h += '<button data-ir="'+etapas[i-1].id+'"><span class="r">Voltar</span><span class="n">'+ etapas[i-1].dataset.em +' '+ etapas[i-1].dataset.nome +'</span></button>';
+  } else {
+    h += '<button disabled><span class="r">Voltar</span><span class="n">Você está no começo</span></button>';
+  }
+  if(i < etapas.length-1){
+    h += '<button class="frente" data-ir="'+etapas[i+1].id+'"><span class="r">Próxima etapa</span><span class="n">'+ etapas[i+1].dataset.nome +' '+ etapas[i+1].dataset.em +'</span></button>';
+  } else {
+    h += '<button class="frente" data-ir="e1"><span class="r">Acabou</span><span class="n">Voltar ao começo 🧭</span></button>';
+  }
+  navFim.innerHTML = h;
+}
+
+document.addEventListener('click', function(e){
+  var alvo = e.target.closest('[data-ir]');
+  if(alvo){ e.preventDefault(); mostrar(alvo.dataset.ir); return; }
+  if(menu.classList.contains('aberto') && !e.target.closest('#menu') && !e.target.closest('#abrir')) fecharMenu();
+});
+window.addEventListener('hashchange', function(){
+  var id = location.hash.slice(1);
+  if(id && document.getElementById(id)) mostrar(id);
+});
+
+/* ---------- progresso ---------- */
+var todas = [].slice.call(document.querySelectorAll('.check input'));
+todas.forEach(function(inp, n){
+  var caixa = inp.closest('.check');
+  inp.dataset.id = caixa.dataset.check + ':' + n;
+  if(estado.feitos[inp.dataset.id]) inp.checked = true;
+  inp.addEventListener('change', function(){
+    if(inp.checked) estado.feitos[inp.dataset.id] = 1; else delete estado.feitos[inp.dataset.id];
+    salvar(); atualizar(); agendarSync();
+    if(inp.checked) aviso('Salvo. Pode fechar e voltar depois.');
+  });
+});
+
+var aro = document.getElementById('aro'), VOLTA = 119.4;
+function atualizar(){
+  var feitos = todas.filter(function(i){ return i.checked; }).length;
+  var pc = todas.length ? Math.round(feitos / todas.length * 100) : 0;
+  document.getElementById('pct').textContent = pc + '%';
+  document.getElementById('pctSub').textContent = feitos + ' de ' + todas.length + ' marcados';
+  aro.setAttribute('stroke-dashoffset', VOLTA - VOLTA * pc / 100);
+  document.getElementById('barraMini').style.width = pc + '%';
+  etapas.forEach(function(s){
+    var ins = [].slice.call(s.querySelectorAll('.check input'));
+    var marca = nav.querySelector('[data-ok="' + s.id + '"]');
+    if(!marca) return;
+    marca.textContent = (ins.length && ins.every(function(i){ return i.checked; })) ? '✓' : '';
+  });
+}
+
+/* ---------- copiar ---------- */
+var toast = document.getElementById('toast'), relogio;
+function aviso(txt){
+  toast.textContent = txt; toast.classList.add('on');
+  clearTimeout(relogio); relogio = setTimeout(function(){ toast.classList.remove('on'); }, 2200);
+}
+function ligarCopia(raiz){
+  [].slice.call(raiz.querySelectorAll('.copiar')).forEach(function(b){
+    if(b.dataset.pronto) return;
+    b.dataset.pronto = '1';
+    b.addEventListener('click', function(){
+      var txt = b.closest('.prompt').querySelector('pre').innerText;
+      function ok(){
+        b.textContent = 'Copiado ✓'; b.classList.add('feito');
+        aviso('Prompt copiado. Agora cola no Claude.');
+        setTimeout(function(){ b.textContent = 'Copiar'; b.classList.remove('feito'); }, 2200);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok).catch(velho);
+      } else velho();
+      function velho(){
+        var ta = document.createElement('textarea');
+        ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); ok(); }catch(e){ aviso('Não deu pra copiar. Seleciona o texto na mão.'); }
+        document.body.removeChild(ta);
+      }
+    });
+  });
+}
+
+/* ---------- cofre de prompts ---------- */
+(function cofre(){
+  var destino = document.getElementById('cofre'), html = '';
+  etapas.forEach(function(s){
+    if(s.id === 'e16') return;
+    [].slice.call(s.querySelectorAll('.prompt')).forEach(function(p){
+      var c = p.cloneNode(true);
+      var lbl = c.querySelector('.lbl');
+      lbl.textContent = lbl.textContent + ' · etapa ' + (indice(s.id)+1);
+      html += c.outerHTML;
+    });
+  });
+  destino.innerHTML = html;
+})();
+
+/* ---------- manda o progresso pra Lara ---------- */
+var SB_URL = 'https://mfrmnquvwwuxraqgemyh.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1mcm1ucXV2d3d1eHJhcWdlbXloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNDI1NDIsImV4cCI6MjA4NzYxODU0Mn0.zmsi08dV5L1IlXJSr34vOii71w0g0OsD5_5DKio5g-o';
+var CHAVE_ALUNA = 'guia-imersao:aluna';
+var relogioSync;
+function quemSou(){
+  try{ return JSON.parse(localStorage.getItem(CHAVE_ALUNA) || 'null'); }catch(e){ return null; }
+}
+function mandarProgresso(corpo){
+  try{
+    return fetch(SB_URL + '/rest/v1/rpc/imersao_salvar_progresso_d2', {
+      method: 'POST', keepalive: true,
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(corpo)
+    }).then(function(r){ return r.ok; }).catch(function(){ return false; });
+  }catch(e){ return Promise.resolve(false); }
+}
+function sincronizar(){
+  var eu = quemSou();
+  if(!eu || !eu.arroba) return;
+  var feitos = Object.keys(estado.feitos || {});
+  var basico = {
+    p_arroba: eu.arroba,
+    p_nome: eu.nome || null,
+    p_etapa: estado.ultima || 'e1',
+    p_feitos: feitos,
+    p_marcados: feitos.length,
+    p_total: todas.length
+  };
+  var completo = { p_email: eu.email || null, p_whatsapp: eu.whatsapp || null };
+  for(var k in basico) completo[k] = basico[k];
+
+  /* se o banco ainda nao tiver as colunas de e-mail e whatsapp, grava o resto.
+     a identidade vai junto em toda sincronia, entao quando as colunas nascerem
+     o proximo envio preenche elas sozinho. */
+  mandarProgresso(completo).then(function(ok){ if(!ok) mandarProgresso(basico); });
+}
+/* junta as marcacoes rapidas numa mandada so */
+function agendarSync(){ clearTimeout(relogioSync); relogioSync = setTimeout(sincronizar, 1200); }
+document.addEventListener('aluna-pronta', sincronizar);
+window.addEventListener('beforeunload', sincronizar);
+
+/* ---------- pdf e recomecar ---------- */
+document.getElementById('pdf').addEventListener('click', function(){ window.print(); });
+document.getElementById('zerar').addEventListener('click', function(){
+  if(!confirm('Isso apaga todos os seus checkpoints e você começa do zero. Tem certeza?')) return;
+  try{ localStorage.removeItem(CHAVE); }catch(e){}
+  location.reload();
+});
+
+/* ---------- teclado ---------- */
+document.addEventListener('keydown', function(e){
+  if(e.target.matches('input,textarea')) return;
+  var i = indice(estado.ultima);
+  if(e.key === 'ArrowRight' && i < etapas.length-1) mostrar(etapas[i+1].id);
+  if(e.key === 'ArrowLeft' && i > 0) mostrar(etapas[i-1].id);
+  if(e.key === 'Escape') fecharMenu();
+});
+
+/* ---------- liga tudo ---------- */
+ligarCopia(document);
+atualizar();
+var inicial = location.hash.slice(1);
+mostrar(document.getElementById(inicial) ? inicial : (estado.ultima || 'e1'), true);
+/* o navegador rola sozinho ate a ancora do #e12 e corta o topo da etapa.
+   desfaz isso depois que ele terminou de rolar. */
+window.scrollTo(0,0);
+requestAnimationFrame(function(){ window.scrollTo(0,0); });
+window.addEventListener('load', function(){ window.scrollTo(0,0); });
+
+})();
+
+/* ================= porteira =================
+   mesma palavra do site dos modelos. a chave mora no mesmo
+   eilaradam.github.io, entao quem ja entrou la nao digita de novo. */
+(function(){
+  var portao = document.getElementById('portao');
+  var passoSenha = document.getElementById('passoSenha');
+  var passoNome  = document.getElementById('passoNome');
+  var CH = 'guia-imersao:aluna';
+
+  function temSenha(){ try{ return localStorage.getItem('imersaoOk') === '1'; }catch(e){ return false; } }
+  /* quem entrou na versao antiga (so nome e @) precisa completar o cadastro */
+  function guardado(){
+    try{ return JSON.parse(localStorage.getItem(CH) || 'null') || {}; }catch(e){ return {}; }
+  }
+  function temNome(){
+    var x = guardado();
+    return !!(x.nome && x.arroba && x.email && x.whatsapp);
+  }
+  function abrePasso(el, foco){
+    passoSenha.hidden = (el !== passoSenha);
+    passoNome.hidden  = (el !== passoNome);
+    if(el === passoNome){
+      var x = guardado();
+      if(x.nome)     document.getElementById('campoNome').value = x.nome;
+      if(x.email)    document.getElementById('campoEmail').value = x.email;
+      if(x.arroba)   document.getElementById('campoArroba').value = '@' + x.arroba;
+      if(x.whatsapp) document.getElementById('campoZap').value = x.whatsapp;
+    }
+    setTimeout(function(){ try{ document.getElementById(foco).focus(); }catch(e){} }, 160);
+  }
+  function seguir(){
+    if(!temSenha()){ abrePasso(passoSenha, 'senha'); return; }
+    if(!temNome()){  abrePasso(passoNome,  'campoNome'); return; }
+    portao.classList.add('fora');
+    document.dispatchEvent(new Event('aluna-pronta'));
+  }
+
+  document.getElementById('portaoForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var campo = document.getElementById('senha');
+    var v = campo.value.trim().toLowerCase().replace(/\s+/g, '');
+    if(v === 'imersao' || v === 'imersao2' || v === 'turma2'){
+      try{ localStorage.setItem('imersaoOk', '1'); }catch(e){}
+      document.getElementById('portaoErro').classList.remove('on');
+      seguir();
+    } else {
+      document.getElementById('portaoErro').classList.add('on');
+      campo.select();
+    }
+  });
+
+  document.getElementById('nomeForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var erro = document.getElementById('nomeErro');
+    var nome  = document.getElementById('campoNome').value.trim().replace(/\s+/g, ' ');
+    var email = document.getElementById('campoEmail').value.trim().toLowerCase();
+    var arroba = document.getElementById('campoArroba').value.trim().toLowerCase()
+                   .replace(/^@+/, '').replace(/[^a-z0-9._]/g, '');
+    var zap = document.getElementById('campoZap').value.replace(/[^0-9]/g, '');
+
+    if(nome.length < 2 || arroba.length < 2 || !email || zap.length < 10){
+      erro.textContent = 'Preenche tudo, por favor 💛';
+      erro.classList.add('on'); return;
+    }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+      erro.textContent = 'Esse e-mail parece incompleto, confere pra mim 💛';
+      erro.classList.add('on'); return;
+    }
+    erro.classList.remove('on');
+    try{ localStorage.setItem(CH, JSON.stringify({
+      nome: nome, email: email, arroba: arroba, whatsapp: zap
+    })); }catch(e){}
+    seguir();
+  });
+
+  seguir();
+})();
+</script>
+</body>
+</html>
