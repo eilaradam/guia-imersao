@@ -239,16 +239,18 @@ ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;h
       <p class="portao__dica">Esqueceu? Me chama no direct: <strong>@eilaradam</strong></p>
     </div>
     <div id="passoNome" hidden>
-      <div class="portao__selo">Só mais uma coisa</div>
-      <h1>Como a gente te chama?</h1>
-      <p>É assim que a Lara te acha durante a aula, pra chegar em você quando travar.</p>
-      <form id="nomeForm" class="portao__campos">
-        <input id="campoNome" type="text" autocomplete="name" placeholder="Seu nome" aria-label="Seu nome">
-        <input id="campoArroba" type="text" autocomplete="off" placeholder="@ do seu Instagram" aria-label="Seu Instagram">
-        <button type="submit">Começar a apostila</button>
+      <div class="portao__selo">Preencha para ter acesso</div>
+      <h1>Bem-vinda à apostila!</h1>
+      <p>Essa é a sua apostila da aula, onde você encontra os prompts, os tutoriais e as explicações.</p>
+      <form id="nomeForm" class="portao__campos" novalidate>
+        <input id="campoNome"   type="text"  autocomplete="name"  placeholder="Seu nome completo" aria-label="Seu nome completo">
+        <input id="campoEmail"  type="email" autocomplete="email" placeholder="Seu melhor e-mail" aria-label="Seu e-mail">
+        <input id="campoArroba" type="text"  autocomplete="off"   placeholder="@ do seu Instagram" aria-label="Seu Instagram">
+        <input id="campoZap"    type="tel"   autocomplete="tel"   placeholder="Seu WhatsApp com DDD" aria-label="Seu WhatsApp">
+        <button type="submit">Entrar na apostila</button>
       </form>
-      <p id="nomeErro">Preenche os dois, por favor 💛</p>
-      <p class="portao__dica">Só a Lara vê, e é só pra saber quem precisa de ajuda.</p>
+      <p id="nomeErro">Preenche tudo, por favor 💛</p>
+      <p class="portao__dica">É um pré-cadastro rápido, e é o que garante o seu acesso durante e depois da aula.</p>
     </div>
   </div>
 </div>
@@ -1134,6 +1136,8 @@ function sincronizar(){
       body: JSON.stringify({
         p_arroba: eu.arroba,
         p_nome: eu.nome || null,
+        p_email: eu.email || null,
+        p_whatsapp: eu.whatsapp || null,
         p_etapa: estado.ultima || 'e1',
         p_feitos: feitos,
         p_marcados: feitos.length,
@@ -1218,13 +1222,25 @@ window.addEventListener('load', function(){ window.scrollTo(0,0); });
 
   document.getElementById('nomeForm').addEventListener('submit', function(e){
     e.preventDefault();
-    var nome = document.getElementById('campoNome').value.trim().replace(/\s+/g, ' ');
+    var erro = document.getElementById('nomeErro');
+    var nome  = document.getElementById('campoNome').value.trim().replace(/\s+/g, ' ');
+    var email = document.getElementById('campoEmail').value.trim().toLowerCase();
     var arroba = document.getElementById('campoArroba').value.trim().toLowerCase()
                    .replace(/^@+/, '').replace(/[^a-z0-9._]/g, '');
-    var erro = document.getElementById('nomeErro');
-    if(nome.length < 2 || arroba.length < 2){ erro.classList.add('on'); return; }
+    var zap = document.getElementById('campoZap').value.replace(/[^0-9]/g, '');
+
+    if(nome.length < 2 || arroba.length < 2 || !email || zap.length < 10){
+      erro.textContent = 'Preenche tudo, por favor 💛';
+      erro.classList.add('on'); return;
+    }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+      erro.textContent = 'Esse e-mail parece incompleto, confere pra mim 💛';
+      erro.classList.add('on'); return;
+    }
     erro.classList.remove('on');
-    try{ localStorage.setItem(CH, JSON.stringify({ nome: nome, arroba: arroba })); }catch(e){}
+    try{ localStorage.setItem(CH, JSON.stringify({
+      nome: nome, email: email, arroba: arroba, whatsapp: zap
+    })); }catch(e){}
     seguir();
   });
 
