@@ -207,6 +207,11 @@ ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;h
 .rodapeMenu{margin-top:24px;padding-top:15px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
 .rodapeMenu b{display:block;font-family:var(--fh);font-weight:800;color:var(--ink);font-size:12.5px;margin-bottom:2px}
 .rodapeMenu button{background:none;border:0;padding:0;margin-top:9px;display:block;font-family:var(--fb);font-size:11.5px;color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.quemSou{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:11px 12px;margin-bottom:13px}
+.quemSou .rot{font-family:var(--fm);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:4px}
+.quemSou .nome{font-family:var(--fh);font-weight:800;font-size:13px;color:var(--ink);display:block;line-height:1.25}
+.quemSou .arroba{font-family:var(--fm);font-size:11px;color:var(--muted);display:block;margin-top:1px}
+.quemSou button{background:none;border:0;padding:0;margin-top:7px;font-family:var(--fb);font-size:11px;color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 
 @media (max-width:1000px){
   #topo{display:flex} #fechar{display:block}
@@ -267,6 +272,7 @@ ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;h
   </div>
   <nav id="nav"></nav>
   <div class="rodapeMenu">
+    <div class="quemSou" id="quemSou" hidden></div>
     <b>@eilaradam</b>
     Imersão Claude pra Creator · Dia 1
     <a href="https://eilaradam.github.io/imersao/" target="_blank" rel="noopener" style="display:block;margin-top:9px;font-size:11.5px;color:var(--red);text-decoration:underline;text-underline-offset:3px">Todos os links da imersão</a>
@@ -1188,6 +1194,38 @@ window.scrollTo(0,0);
 requestAnimationFrame(function(){ window.scrollTo(0,0); });
 window.addEventListener('load', function(){ window.scrollTo(0,0); });
 
+})();
+
+/* ================= quem está usando a apostila =================
+   mostra o nome no rodapé do menu e deixa trocar de pessoa, pra quando
+   duas alunas usarem o mesmo computador. */
+(function(){
+  var caixa = document.getElementById('quemSou');
+  if(!caixa) return;
+  function dados(){
+    try{ return JSON.parse(localStorage.getItem('guia-imersao:aluna') || 'null'); }catch(e){ return null; }
+  }
+  function pinta(){
+    var x = dados();
+    caixa.textContent = '';
+    if(!x || !x.nome){ caixa.hidden = true; return; }
+    caixa.hidden = false;
+    var rot = document.createElement('span'); rot.className = 'rot'; rot.textContent = 'Você está como';
+    var nome = document.createElement('span'); nome.className = 'nome'; nome.textContent = x.nome;
+    var arr = document.createElement('span'); arr.className = 'arroba'; arr.textContent = '@' + (x.arroba || '');
+    var bt = document.createElement('button'); bt.type = 'button'; bt.textContent = 'Não sou eu, trocar';
+    bt.addEventListener('click', function(){
+      if(!confirm('Isso pede o cadastro de novo, pra apostila ficar no nome de quem está usando. Continuar?')) return;
+      try{
+        localStorage.removeItem('guia-imersao:aluna');
+        localStorage.removeItem('guia-imersao-d2:ok');
+      }catch(e){}
+      location.reload();
+    });
+    caixa.appendChild(rot); caixa.appendChild(nome); caixa.appendChild(arr); caixa.appendChild(bt);
+  }
+  document.addEventListener('aluna-pronta', pinta);
+  pinta();
 })();
 
 /* ================= porteira =================
