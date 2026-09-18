@@ -195,6 +195,13 @@ ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;h
 #portaoErro{visibility:hidden;color:var(--red);font-weight:600;font-size:15px;margin-top:15px}
 #portaoErro.on{visibility:visible}
 .portao__dica{margin-top:20px;font-size:14px}
+.portao__campos{display:grid;gap:10px;margin-top:26px}
+.portao__campos input{width:100%;min-width:0;border:2px solid var(--ink);border-radius:9px;padding:14px 16px;font-family:var(--fb);font-size:16px;background:var(--white)}
+.portao__campos input:focus{outline:3px solid var(--red);outline-offset:1px}
+.portao__campos button{background:var(--red);color:#fff;border:0;border-radius:9px;padding:15px 26px;font-family:var(--fh);font-weight:800;font-size:15px;cursor:pointer;margin-top:4px}
+.portao__campos button:hover{background:var(--red-dark)}
+#nomeErro{visibility:hidden;color:var(--red);font-weight:600;font-size:15px;margin-top:15px}
+#nomeErro.on{visibility:visible}
 
 /* ---------- assinatura do menu ---------- */
 .rodapeMenu{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
@@ -220,15 +227,29 @@ ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;h
 
 <div id="portao">
   <div class="portao__caixa">
-    <div class="portao__selo">Imersão Claude pra Creator</div>
-    <h1>Sua apostila</h1>
-    <p>Todo o passo a passo do Dia 1, com os prompts prontos. Digite a palavra que eu falei na aula.</p>
-    <form id="portaoForm">
-      <input id="senha" type="text" autocomplete="off" placeholder="a palavra da aula" aria-label="senha">
-      <button type="submit">Entrar</button>
-    </form>
-    <p id="portaoErro">Não é essa. Tenta de novo 💛</p>
-    <p class="portao__dica">Esqueceu? Me chama no direct: <strong>@eilaradam</strong></p>
+    <div id="passoSenha">
+      <div class="portao__selo">Imersão Claude pra Creator</div>
+      <h1>Sua apostila</h1>
+      <p>Todo o passo a passo do Dia 1, com os prompts prontos. Digite a palavra que eu falei na aula.</p>
+      <form id="portaoForm">
+        <input id="senha" type="text" autocomplete="off" placeholder="a palavra da aula" aria-label="senha">
+        <button type="submit">Entrar</button>
+      </form>
+      <p id="portaoErro">Não é essa. Tenta de novo 💛</p>
+      <p class="portao__dica">Esqueceu? Me chama no direct: <strong>@eilaradam</strong></p>
+    </div>
+    <div id="passoNome" hidden>
+      <div class="portao__selo">Só mais uma coisa</div>
+      <h1>Como a gente te chama?</h1>
+      <p>É assim que a Lara te acha durante a aula, pra chegar em você quando travar.</p>
+      <form id="nomeForm" class="portao__campos">
+        <input id="campoNome" type="text" autocomplete="name" placeholder="Seu nome" aria-label="Seu nome">
+        <input id="campoArroba" type="text" autocomplete="off" placeholder="@ do seu Instagram" aria-label="Seu Instagram">
+        <button type="submit">Começar a apostila</button>
+      </form>
+      <p id="nomeErro">Preenche os dois, por favor 💛</p>
+      <p class="portao__dica">Só a Lara vê, e é só pra saber quem precisa de ajuda.</p>
+    </div>
   </div>
 </div>
 
@@ -987,7 +1008,7 @@ function mostrar(id, semScroll){
   });
   document.getElementById('tituloTopo').textContent = (i+1) + '. ' + etapas[i].dataset.nome;
   montarRodape(i);
-  estado.ultima = etapas[i].id; salvar();
+  estado.ultima = etapas[i].id; salvar(); agendarSync();
   fecharMenu();
   if(!semScroll) window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
   if(location.hash !== '#' + etapas[i].id) history.replaceState(null,'','#'+etapas[i].id);
@@ -1027,7 +1048,7 @@ todas.forEach(function(inp, n){
   if(estado.feitos[inp.dataset.id]) inp.checked = true;
   inp.addEventListener('change', function(){
     if(inp.checked) estado.feitos[inp.dataset.id] = 1; else delete estado.feitos[inp.dataset.id];
-    salvar(); atualizar();
+    salvar(); atualizar(); agendarSync();
     if(inp.checked) aviso('Salvo. Pode fechar e voltar depois.');
   });
 });
@@ -1094,6 +1115,38 @@ function ligarCopia(raiz){
   destino.innerHTML = html;
 })();
 
+/* ---------- manda o progresso pra Lara ---------- */
+var SB_URL = 'https://mfrmnquvwwuxraqgemyh.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1mcm1ucXV2d3d1eHJhcWdlbXloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNDI1NDIsImV4cCI6MjA4NzYxODU0Mn0.zmsi08dV5L1IlXJSr34vOii71w0g0OsD5_5DKio5g-o';
+var CHAVE_ALUNA = 'guia-imersao:aluna';
+var relogioSync;
+function quemSou(){
+  try{ return JSON.parse(localStorage.getItem(CHAVE_ALUNA) || 'null'); }catch(e){ return null; }
+}
+function sincronizar(){
+  var eu = quemSou();
+  if(!eu || !eu.arroba) return;
+  var feitos = Object.keys(estado.feitos || {});
+  try{
+    fetch(SB_URL + '/rest/v1/rpc/imersao_salvar_progresso', {
+      method: 'POST', keepalive: true,
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        p_arroba: eu.arroba,
+        p_nome: eu.nome || null,
+        p_etapa: estado.ultima || 'e1',
+        p_feitos: feitos,
+        p_marcados: feitos.length,
+        p_total: todas.length
+      })
+    }).catch(function(){});
+  }catch(e){}
+}
+/* junta as marcacoes rapidas numa mandada so */
+function agendarSync(){ clearTimeout(relogioSync); relogioSync = setTimeout(sincronizar, 1200); }
+document.addEventListener('aluna-pronta', sincronizar);
+window.addEventListener('beforeunload', sincronizar);
+
 /* ---------- pdf e recomecar ---------- */
 document.getElementById('pdf').addEventListener('click', function(){ window.print(); });
 document.getElementById('zerar').addEventListener('click', function(){
@@ -1129,26 +1182,53 @@ window.addEventListener('load', function(){ window.scrollTo(0,0); });
    eilaradam.github.io, entao quem ja entrou la nao digita de novo. */
 (function(){
   var portao = document.getElementById('portao');
-  var liberado = false;
-  try{ liberado = localStorage.getItem('imersaoOk') === '1'; }catch(e){}
-  if(liberado){ portao.classList.add('fora'); return; }
+  var passoSenha = document.getElementById('passoSenha');
+  var passoNome  = document.getElementById('passoNome');
+  var CH = 'guia-imersao:aluna';
 
-  var form = document.getElementById('portaoForm');
-  var campo = document.getElementById('senha');
-  var erro = document.getElementById('portaoErro');
-  setTimeout(function(){ try{ campo.focus(); }catch(e){} }, 160);
+  function temSenha(){ try{ return localStorage.getItem('imersaoOk') === '1'; }catch(e){ return false; } }
+  function temNome(){
+    try{ var x = JSON.parse(localStorage.getItem(CH) || 'null'); return !!(x && x.arroba); }catch(e){ return false; }
+  }
+  function abrePasso(el, foco){
+    passoSenha.hidden = (el !== passoSenha);
+    passoNome.hidden  = (el !== passoNome);
+    setTimeout(function(){ try{ document.getElementById(foco).focus(); }catch(e){} }, 160);
+  }
+  function seguir(){
+    if(!temSenha()){ abrePasso(passoSenha, 'senha'); return; }
+    if(!temNome()){  abrePasso(passoNome,  'campoNome'); return; }
+    portao.classList.add('fora');
+    document.dispatchEvent(new Event('aluna-pronta'));
+  }
 
-  form.addEventListener('submit', function(e){
+  document.getElementById('portaoForm').addEventListener('submit', function(e){
     e.preventDefault();
+    var campo = document.getElementById('senha');
     var v = campo.value.trim().toLowerCase().replace(/\s+/g, '');
     if(v === 'imersao' || v === 'imersao2' || v === 'turma2'){
       try{ localStorage.setItem('imersaoOk', '1'); }catch(e){}
-      portao.classList.add('fora');
+      document.getElementById('portaoErro').classList.remove('on');
+      seguir();
     } else {
-      erro.classList.add('on');
+      document.getElementById('portaoErro').classList.add('on');
       campo.select();
     }
   });
+
+  document.getElementById('nomeForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var nome = document.getElementById('campoNome').value.trim().replace(/\s+/g, ' ');
+    var arroba = document.getElementById('campoArroba').value.trim().toLowerCase()
+                   .replace(/^@+/, '').replace(/[^a-z0-9._]/g, '');
+    var erro = document.getElementById('nomeErro');
+    if(nome.length < 2 || arroba.length < 2){ erro.classList.add('on'); return; }
+    erro.classList.remove('on');
+    try{ localStorage.setItem(CH, JSON.stringify({ nome: nome, arroba: arroba })); }catch(e){}
+    seguir();
+  });
+
+  seguir();
 })();
 </script>
 </body>
