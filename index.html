@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia da Imersão · Dia 1</title>
+<meta name="description" content="O passo a passo pra você montar, publicar e administrar o seu portfólio com o Claude Code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#C8441A; --red-dark:#A3360F; --ink:#1B1B1B; --cream:#FFF8F2; --cream2:#F3EFE9;
+  --line:#E8E0D8; --muted:#5A5550; --white:#fff; --soft:#FFF0E8; --butter:#FEF7CF;
+  --green:#1C7A4E; --green-soft:#E8F5EE;
+  --fh:'Montserrat',Arial,sans-serif; --fb:'DM Sans',Arial,sans-serif; --fm:'DM Mono',ui-monospace,monospace;
+  --nav:320px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:var(--fb);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--red)}
+::selection{background:var(--butter)}
+
+/* ---------- barra do topo (celular) ---------- */
+#topo{position:sticky;top:0;z-index:40;display:none;align-items:center;gap:12px;padding:12px 16px;background:var(--cream);border-bottom:1px solid var(--line)}
+#topo b{font-family:var(--fh);font-weight:800;font-size:15px;flex:1}
+#abrir{background:var(--ink);color:#fff;border:0;border-radius:6px;padding:9px 13px;font-family:var(--fh);font-weight:700;font-size:13px;cursor:pointer}
+#barraMini{position:fixed;top:0;left:0;height:3px;background:var(--red);width:0;z-index:50;transition:width .3s}
+
+/* ---------- menu lateral ---------- */
+#menu{position:fixed;top:0;left:0;width:var(--nav);height:100vh;overflow-y:auto;background:var(--cream2);border-right:1px solid var(--line);padding:30px 22px 40px;z-index:45}
+.marca{font-family:var(--fh);font-weight:900;font-size:21px;letter-spacing:-.02em;line-height:1.1}
+.marca span{color:var(--red)}
+.marca small{display:block;font-family:var(--fm);font-weight:400;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:7px}
+.anel{display:flex;align-items:center;gap:13px;margin:22px 0 26px;padding:14px;background:var(--white);border:1px solid var(--line);border-radius:10px}
+.anel svg{flex:0 0 auto;transform:rotate(-90deg)}
+.anel .t{font-family:var(--fh);font-weight:800;font-size:15px;line-height:1.25}
+.anel .t i{display:block;font-style:normal;font-family:var(--fm);font-weight:400;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.parte{font-family:var(--fm);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:24px 0 9px;padding-left:6px;border-left:3px solid var(--line)}
+.parte:first-of-type{margin-top:0}
+#menu ol{list-style:none}
+#menu a{display:flex;gap:9px;align-items:flex-start;padding:8px 10px;border-radius:7px;text-decoration:none;color:var(--ink);font-size:14.5px;line-height:1.35;font-weight:500;transition:background .15s}
+#menu a:hover{background:var(--white)}
+#menu a.on{background:var(--ink);color:#fff}
+#menu a .em{flex:0 0 auto;font-size:15px;filter:grayscale(.25)}
+#menu a.on .em{filter:none}
+#menu a .ok{margin-left:auto;color:var(--green);font-weight:700}
+#menu a.on .ok{color:#8CE0B4}
+#fechar{display:none;position:absolute;top:18px;right:18px;background:none;border:0;font-size:26px;cursor:pointer;color:var(--ink);line-height:1}
+
+/* ---------- palco ---------- */
+#palco{margin-left:var(--nav);padding:56px 7vw 90px;max-width:1180px}
+.etapa{display:none;animation:sobe .4s both}
+.etapa.on{display:block}
+@keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.cab{border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:34px}
+.trilha{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.trilha .n{background:var(--red);color:#fff;border-radius:4px;padding:3px 8px;letter-spacing:.08em}
+.trilha .hora{background:var(--butter);color:var(--red-dark);border-radius:4px;padding:3px 8px}
+h1{font-family:var(--fh);font-weight:900;font-size:clamp(30px,4.6vw,50px);line-height:1.04;letter-spacing:-.025em}
+.sub{margin-top:14px;font-size:clamp(17px,1.9vw,21px);color:var(--muted);max-width:60ch}
+
+h2.bloco{font-family:var(--fh);font-weight:800;font-size:clamp(19px,2.2vw,25px);letter-spacing:-.015em;margin:44px 0 16px;display:flex;align-items:center;gap:10px}
+h2.bloco::before{content:"";width:22px;height:4px;background:var(--red);border-radius:2px;flex:0 0 auto}
+h3{font-family:var(--fh);font-weight:800;font-size:18px;line-height:1.25}
+p{margin:14px 0;max-width:66ch}
+strong{font-weight:700}
+em{font-style:normal;background:var(--butter);padding:1px 5px;border-radius:3px}
+
+/* ---------- passos ---------- */
+.passos{list-style:none;counter-reset:ps;margin:18px 0;display:grid;gap:14px}
+.passos>li{counter-increment:ps;position:relative;padding:18px 20px 18px 66px;background:var(--white);border:1px solid var(--line);border-radius:10px}
+.passos>li::before{content:counter(ps);position:absolute;left:20px;top:16px;width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:14px}
+.passos>li b{display:block;font-family:var(--fh);font-weight:800;font-size:17px;margin-bottom:4px}
+.passos>li p{margin:0;font-size:16px;color:var(--muted)}
+
+/* ---------- cards ---------- */
+.cards{display:grid;gap:16px;margin:20px 0}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:20px}
+.card .rot{font-family:var(--fm);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.card h3{margin-bottom:7px}
+.card p{margin:0;font-size:15.5px;color:var(--muted)}
+.card.forte{border:2px solid var(--red)}
+.card.escuro{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card.escuro p{color:rgba(255,255,255,.78)}
+.card.escuro .rot{color:#FF9166}
+
+/* ---------- avisos ---------- */
+.aviso,.dica,.certo{border-radius:10px;padding:18px 20px 18px 54px;position:relative;margin:22px 0;font-size:16px}
+.aviso p,.dica p,.certo p{margin:8px 0 0;max-width:none}
+.aviso>b,.dica>b,.certo>b{font-family:var(--fh);font-weight:800;font-size:16.5px}
+.aviso::before,.dica::before,.certo::before{position:absolute;left:19px;top:17px;font-size:19px;line-height:1}
+.aviso{background:var(--soft);border:1px solid #F3C7B3}
+.aviso::before{content:"⚠️"}
+.dica{background:var(--butter);border:1px solid #EDDF9A}
+.dica::before{content:"💡"}
+.certo{background:var(--green-soft);border:1px solid #BBE3CD}
+.certo::before{content:"✅"}
+
+/* ---------- prompt ---------- */
+.prompt{background:var(--ink);border-radius:10px;overflow:hidden;margin:20px 0}
+.prompt .top{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#000;color:#fff}
+.prompt .top .lbl{font-family:var(--fm);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#FF9166;flex:1}
+.prompt .top button{background:var(--red);color:#fff;border:0;border-radius:6px;padding:8px 15px;font-family:var(--fh);font-weight:700;font-size:13px;cursor:pointer;transition:background .15s}
+.prompt .top button:hover{background:var(--red-dark)}
+.prompt .top button.feito{background:var(--green)}
+.prompt pre{margin:0;padding:20px;color:#F2ECE6;font-family:var(--fm);font-size:14.5px;line-height:1.62;white-space:pre-wrap;word-break:break-word;max-height:none}
+.prompt pre mark{background:rgba(255,145,102,.2);color:#FFB08C;padding:1px 4px;border-radius:3px}
+
+/* ---------- telinha (navegador de mentira) ---------- */
+.telinha{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--white);margin:20px 0;box-shadow:0 3px 0 rgba(27,27,27,.06)}
+.telinha .barra{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--cream2);border-bottom:1px solid var(--line)}
+.telinha .barra i{width:10px;height:10px;border-radius:50%;background:#D8CFC6;display:block}
+.telinha .barra span{margin-left:10px;flex:1;background:var(--white);border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-family:var(--fm);font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.telinha .corpo{padding:22px}
+.telinha .legenda{padding:11px 16px;background:var(--cream2);border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.fk{display:block;background:var(--cream2);border-radius:4px;height:11px;margin-bottom:8px}
+.fk.t{height:22px;background:var(--ink);width:56%;margin-bottom:13px}
+.fk.m{width:82%}.fk.s{width:44%}
+.fkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:16px}
+.fkv{aspect-ratio:9/16;border-radius:6px;background:linear-gradient(160deg,#F0D9CD,#E3BCA8);display:flex;align-items:center;justify-content:center;font-size:20px;color:rgba(27,27,27,.4)}
+.fkb{display:inline-block;background:var(--red);color:#fff;border-radius:5px;padding:7px 15px;font-family:var(--fh);font-weight:700;font-size:13px;margin-top:15px}
+.fklinha{display:flex;gap:9px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.fklinha b{font-family:var(--fh);font-weight:700}
+.fklinha .tag{font-family:var(--fm);font-size:10.5px;background:var(--butter);border-radius:3px;padding:2px 7px;margin-left:auto;white-space:nowrap}
+
+/* ---------- diagrama ---------- */
+.diagrama{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center;margin:24px 0}
+.peca{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:20px 16px;text-align:center}
+.peca.meio{border:2px solid var(--red)}
+.peca .onde{font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.peca .ic{font-size:27px;display:block;margin-bottom:8px}
+.peca h3{font-size:17px;margin-bottom:5px}
+.peca p{margin:0;font-size:14px;color:var(--muted)}
+.seta{font-family:var(--fh);font-weight:900;font-size:24px;color:var(--red)}
+
+/* ---------- comparacao ---------- */
+.versus{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+.versus>div{border-radius:10px;padding:20px}
+.versus .ruim{background:var(--cream2);border:1px solid var(--line)}
+.versus .bom{background:var(--ink);color:#fff}
+.versus .rot{font-family:var(--fm);font-size:11px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:11px}
+.versus .ruim .rot{color:var(--muted)}
+.versus .bom .rot{color:#FF9166}
+.versus q{font-size:16px;line-height:1.5;display:block}
+
+/* ---------- checkpoint ---------- */
+.check{background:var(--white);border:2px solid var(--ink);border-radius:11px;padding:22px 24px;margin:30px 0}
+.check .rot{font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:5px}
+.check h3{margin-bottom:14px;font-size:20px}
+.check label{display:flex;gap:12px;align-items:flex-start;padding:9px 0;cursor:pointer;font-size:16.5px;border-top:1px solid var(--line)}
+.check label:first-of-type{border-top:0}
+.check input{appearance:none;flex:0 0 auto;width:23px;height:23px;border:2px solid var(--ink);border-radius:5px;cursor:pointer;position:relative;margin-top:1px;transition:background .15s}
+.check input:checked{background:var(--green);border-color:var(--green)}
+.check input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
+.check input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.check label:has(input:checked){color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(27,27,27,.25)}
+
+/* ---------- lista simples ---------- */
+ul.pontos{list-style:none;margin:16px 0;display:grid;gap:11px}
+ul.pontos li{position:relative;padding-left:26px;max-width:66ch}
+ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--red)}
+
+/* ---------- rodape de navegacao ---------- */
+.nav{display:flex;gap:12px;margin-top:56px;padding-top:26px;border-top:1px solid var(--line)}
+.nav button{flex:1;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:16px 18px;text-align:left;cursor:pointer;font-family:var(--fb);transition:border-color .15s}
+.nav button:hover{border-color:var(--ink)}
+.nav button:disabled{opacity:.35;cursor:default}
+.nav button .r{display:block;font-family:var(--fm);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.nav button .n{font-family:var(--fh);font-weight:800;font-size:16px}
+.nav button.frente{background:var(--ink);color:#fff;border-color:var(--ink);text-align:right}
+.nav button.frente .r{color:#FF9166}
+
+/* ---------- toast ---------- */
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,120%);background:var(--ink);color:#fff;padding:13px 22px;border-radius:9px;font-family:var(--fh);font-weight:700;font-size:14.5px;z-index:90;transition:transform .3s}
+#toast.on{transform:translate(-50%,0)}
+
+/* ---------- porteira ---------- */
+#portao{position:fixed;inset:0;z-index:100;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:24px}
+#portao.fora{display:none}
+.portao__caixa{background:var(--cream);border-radius:14px;padding:clamp(30px,5vw,46px) clamp(24px,4vw,42px);max-width:500px;width:100%;text-align:center}
+.portao__selo{font-family:var(--fm);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:13px}
+.portao__caixa h1{font-size:clamp(30px,6vw,44px);margin-bottom:12px}
+.portao__caixa p{margin:0 auto;color:var(--muted);font-size:16.5px;max-width:36ch}
+#portaoForm{display:flex;gap:10px;margin-top:26px}
+#portaoForm input{flex:1;min-width:0;border:2px solid var(--ink);border-radius:9px;padding:14px 16px;font-family:var(--fb);font-size:16px;background:var(--white)}
+#portaoForm input:focus{outline:3px solid var(--red);outline-offset:1px}
+#portaoForm button{background:var(--red);color:#fff;border:0;border-radius:9px;padding:14px 26px;font-family:var(--fh);font-weight:800;font-size:15px;cursor:pointer}
+#portaoForm button:hover{background:var(--red-dark)}
+#portaoErro{visibility:hidden;color:var(--red);font-weight:600;font-size:15px;margin-top:15px}
+#portaoErro.on{visibility:visible}
+.portao__dica{margin-top:20px;font-size:14px}
+
+/* ---------- assinatura do menu ---------- */
+.rodapeMenu{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.rodapeMenu b{display:block;font-family:var(--fh);font-weight:800;color:var(--ink);font-size:14.5px;margin-bottom:3px}
+.rodapeMenu button{background:none;border:0;padding:0;margin-top:11px;display:block;font-family:var(--fb);font-size:13px;color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+@media (max-width:1000px){
+  #topo{display:flex} #fechar{display:block}
+  #menu{transform:translateX(-102%);transition:transform .28s;width:min(330px,88vw);box-shadow:0 0 0 100vw rgba(27,27,27,0)}
+  #menu.aberto{transform:none;box-shadow:0 0 0 100vw rgba(27,27,27,.45)}
+  #palco{margin-left:0;padding:30px 20px 70px}
+  .c2,.c3,.c4,.versus{grid-template-columns:1fr}
+  .diagrama{grid-template-columns:1fr}
+  .seta{transform:rotate(90deg);text-align:center}
+  .fkgrid{grid-template-columns:repeat(3,1fr)}
+  .nav{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{#menu,#topo,.nav,#toast,#portao{display:none}#palco{margin:0}.etapa{display:block!important;page-break-after:always}}
+</style>
+</head>
+<body>
+
+<div id="portao">
+  <div class="portao__caixa">
+    <div class="portao__selo">Imersão Claude pra Creator</div>
+    <h1>Sua apostila</h1>
+    <p>Todo o passo a passo do Dia 1, com os prompts prontos. Digite a palavra que eu falei na aula.</p>
+    <form id="portaoForm">
+      <input id="senha" type="text" autocomplete="off" placeholder="a palavra da aula" aria-label="senha">
+      <button type="submit">Entrar</button>
+    </form>
+    <p id="portaoErro">Não é essa. Tenta de novo 💛</p>
+    <p class="portao__dica">Esqueceu? Me chama no direct: <strong>@eilaradam</strong></p>
+  </div>
+</div>
+
+<div id="barraMini"></div>
+<div id="topo"><button id="abrir">☰ Etapas</button><b id="tituloTopo">Guia da Imersão</b></div>
+
+<aside id="menu">
+  <button id="fechar" aria-label="Fechar">×</button>
+  <div class="marca">Guia da <span>Imersão</span><small>Dia 1 · Construir</small></div>
+  <div class="anel">
+    <svg width="46" height="46" viewBox="0 0 46 46"><circle cx="23" cy="23" r="19" fill="none" stroke="#E8E0D8" stroke-width="5"/><circle id="aro" cx="23" cy="23" r="19" fill="none" stroke="#C8441A" stroke-width="5" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>
+    <div class="t"><span id="pct">0%</span><i id="pctSub">nada marcado ainda</i></div>
+  </div>
+  <nav id="nav"></nav>
+  <div class="rodapeMenu">
+    <b>@eilaradam</b>
+    Imersão Claude pra Creator · Dia 1
+    <button id="pdf">Salvar em PDF</button>
+    <button id="zerar">Recomeçar do zero</button>
+  </div>
+</aside>
+
+<main id="palco">
+
+<!-- ====== 1 ====== -->
+<section class="etapa" id="e1" data-parte="Entender" data-em="🧭" data-nome="Como usar este guia">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 01</span><span>Entender</span></div>
+    <h1>Esse guia é o seu passo a passo.<br>Ele não expira às 17h.</h1>
+    <p class="sub">Tudo que a gente fizer junto na aula está escrito aqui, na ordem, com os prompts prontos pra copiar. Se você travar, se perder ou quiser refazer daqui a um mês, é por aqui.</p>
+  </div>
+
+  <h2 class="bloco">Onde você chega no fim</h2>
+  <div class="cards c2">
+    <div>
+      <div class="telinha">
+        <div class="barra"><i></i><i></i><i></i><span>seunome.github.io/portfolio</span></div>
+        <div class="corpo">
+          <span class="fk t"></span><span class="fk m"></span><span class="fk s"></span>
+          <div class="fkgrid"><div class="fkv">▶</div><div class="fkv">▶</div><div class="fkv">▶</div></div>
+          <span class="fkb">Falar comigo</span>
+        </div>
+        <div class="legenda"><strong>Seu portfólio.</strong> É o que a marca abre.</div>
+      </div>
+    </div>
+    <div>
+      <div class="telinha">
+        <div class="barra"><i></i><i></i><i></i><span>seunome.github.io/admin</span></div>
+        <div class="corpo">
+          <span class="fk t" style="width:38%"></span>
+          <div class="fklinha"><b>Campanha Marca X</b><span class="tag">aprovado</span></div>
+          <div class="fklinha"><b>Lead novo · loja de casa</b><span class="tag">hoje</span></div>
+          <div class="fklinha"><b>Gravar review</b><span class="tag">sexta</span></div>
+          <div class="fklinha"><b>Vídeo novo no portfólio</b><span class="tag">no ar</span></div>
+        </div>
+        <div class="legenda"><strong>Seu admin.</strong> É o que só você abre.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="bloco">Como usar</h2>
+  <ul class="passos">
+    <li><b>Siga na ordem</b><p>São 16 etapas. Cada uma só faz sentido se a anterior estiver de pé. Não pule.</p></li>
+    <li><b>Cada etapa tem três partes</b><p>O que fazer, o prompt pronto pra copiar, e o que você deve ver na tela depois.</p></li>
+    <li><b>Marque os checkpoints</b><p>As caixinhas de "deu certo" ficam salvas no seu navegador. Você fecha, volta amanhã e continua de onde parou.</p></li>
+    <li><b>Não precisa decorar nada</b><p>Você não vai escrever código hoje. Você vai aprender a pedir. Quem sabe pedir constrói qualquer coisa depois.</p></li>
+  </ul>
+
+  <div class="dica"><b>Deixa duas abas abertas</b>
+    <p>Esse guia numa aba e o Claude Code na outra. Você copia daqui e cola lá. É esse o ritmo do dia inteiro.</p>
+  </div>
+
+  <div class="check" data-check="e1">
+    <div class="rot">Checkpoint</div>
+    <h3>Antes de começar</h3>
+    <label><input type="checkbox"> Estou com o Claude Code aberto no computador</label>
+    <label><input type="checkbox"> Tenho conta no GitHub e consigo entrar</label>
+    <label><input type="checkbox"> Tenho conta no Supabase e consigo entrar</label>
+    <label><input type="checkbox"> Salvei esse guia nos favoritos</label>
+  </div>
+</section>
+
+<!-- ====== 2 ====== -->
+<section class="etapa" id="e2" data-parte="Entender" data-em="🤖" data-nome="O Claude Code em 2 minutos">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 02</span><span>Entender</span></div>
+    <h1>O Claude Code não é o Claude do chat.</h1>
+    <p class="sub">Os dois são o mesmo assistente. O que muda é o que ele pode tocar.</p>
+  </div>
+
+  <div class="cards c2">
+    <div class="card">
+      <div class="rot">Porta 1</div><h3>💬 Claude (chat)</h3>
+      <p>Você conversa, ele responde na tela. Serve pra pensar, escrever legenda, analisar briefing, revisar roteiro. Nada sai do chat.</p>
+    </div>
+    <div class="card forte">
+      <div class="rot">Porta 2 · a de hoje</div><h3>🛠️ Claude Code</h3>
+      <p>A parte de Code do mesmo aplicativo. Você conversa e ele mexe nos arquivos do seu computador: cria a pasta, escreve o site, arruma o que quebrou e publica.</p>
+    </div>
+  </div>
+
+  <h2 class="bloco">O ciclo que se repete o dia inteiro</h2>
+  <div class="diagrama">
+    <div class="peca"><span class="ic">🗣️</span><h3>Você pede</h3><p>Em português, do jeito que você fala</p></div>
+    <div class="seta">→</div>
+    <div class="peca meio"><span class="ic">📄</span><h3>Ele cria</h3><p>Os arquivos aparecem na sua pasta</p></div>
+    <div class="seta">→</div>
+    <div class="peca"><span class="ic">👀</span><h3>Você olha</h3><p>Abre no navegador e pede o ajuste</p></div>
+  </div>
+  <p>Depois volta pro começo. Pede, olha, ajusta. É só isso, umas cinquenta vezes.</p>
+
+  <h2 class="bloco">Sete palavras que vão aparecer</h2>
+  <div class="cards c4">
+    <div class="card"><h3>📁 Pasta</h3><p>Onde o site mora no seu computador. Uma pasta por projeto.</p></div>
+    <div class="card"><h3>📄 Arquivo</h3><p><span style="font-family:var(--fm)">index.html</span> é a página, <span style="font-family:var(--fm)">style.css</span> é o visual, <span style="font-family:var(--fm)">main.js</span> é o comportamento.</p></div>
+    <div class="card"><h3>🎨 Modelo</h3><p>Um dos portfólios prontos que a Lara fez. Você escolhe e o prompt adapta pra você.</p></div>
+    <div class="card"><h3>👁️ Prévia</h3><p>O site aberto no seu navegador antes de ir pro ar. Só você vê.</p></div>
+    <div class="card"><h3>📦 Repositório</h3><p>A cópia do projeto guardada no GitHub. É de lá que o site publica.</p></div>
+    <div class="card"><h3>🚀 Publicar</h3><p>Mandar os arquivos pro ar. Depois disso qualquer pessoa abre pelo link.</p></div>
+    <div class="card"><h3>🗄️ Banco de dados</h3><p>Onde ficam os dados que mudam: seus vídeos, seus leads. Hoje é o Supabase.</p></div>
+    <div class="card escuro"><h3>E acabou</h3><p>O resto ele explica quando aparecer. É só perguntar: <em style="background:rgba(255,145,102,.25);color:#FFB08C">explica isso como se eu nunca tivesse programado</em>.</p></div>
+  </div>
+
+  <div class="dica"><b>Trava esse prompt na cabeça</b>
+    <p>Sempre que algo aparecer na tela e você não entender, pergunta. Não tem pergunta boba e ele não se cansa.</p>
+  </div>
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · entender o que ele fez</span><button class="copiar">Copiar</button></div>
+    <pre>Me explica o que você acabou de fazer, como se eu nunca tivesse programado na vida.</pre>
+  </div>
+</section>
+
+<!-- ====== 3 ====== -->
+<section class="etapa" id="e3" data-parte="Entender" data-em="🎯" data-nome="Como pedir bem">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 03</span><span>Entender</span></div>
+    <h1>Pedir bem é a única habilidade que importa hoje.</h1>
+    <p class="sub">É o que separa quem constrói de quem desiste no meio. Um pedido bom tem quatro coisas.</p>
+  </div>
+
+  <div class="cards c4">
+    <div class="card"><div class="rot">01</div><h3>Contexto</h3><p>Quem você é e pra quem é o site.</p></div>
+    <div class="card"><div class="rot">02</div><h3>Resultado</h3><p>O que você quer ver na tela depois.</p></div>
+    <div class="card"><div class="rot">03</div><h3>Limite</h3><p>O que ele não pode mexer.</p></div>
+    <div class="card"><div class="rot">04</div><h3>Ritmo</h3><p>Um pedido por vez. Sempre.</p></div>
+  </div>
+
+  <h2 class="bloco">A diferença na prática</h2>
+  <div class="versus">
+    <div class="ruim">
+      <div class="rot">Pedido que dá trabalho</div>
+      <q>"Deixa meu site mais bonito e organiza melhor os vídeos e muda a cor e coloca meu contato"</q>
+      <p style="font-size:14.5px;margin-top:12px">Quatro pedidos juntos, nenhum com alvo. Ele vai mexer em tudo e você não vai saber o que mudou.</p>
+    </div>
+    <div class="bom">
+      <div class="rot">Pedido que funciona</div>
+      <q>"Sou creator UGC de casa e decoração. Na seção de vídeos, quero 6 vídeos em 3 por linha, com o nome da marca embaixo de cada um. Não muda as cores nem as outras seções."</q>
+      <p style="font-size:14.5px;margin-top:12px;color:rgba(255,255,255,.75)">Contexto, resultado e limite. Um alvo só.</p>
+    </div>
+  </div>
+
+  <div class="aviso"><b>O erro mais comum do dia</b>
+    <p>Pedir cinco coisas de uma vez porque parece que economiza tempo. Não economiza. Vira bagunça, você não consegue voltar atrás, e aí tem que refazer. Pediu, olhou no navegador, aí pede o próximo.</p>
+  </div>
+</section>
+
+<!-- ====== 4 ====== -->
+<section class="etapa" id="e4" data-parte="O portfólio" data-em="📋" data-nome="Sua ficha">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 04</span><span>O portfólio</span><span class="hora">Antes das 10h</span></div>
+    <h1>Separe isso antes. Não dá pra improvisar no meio.</h1>
+    <p class="sub">São as respostas que o site do prompt vai te pedir. Junta tudo num bloco de notas e deixa aberto.</p>
+  </div>
+
+  <div class="check" data-check="e4">
+    <div class="rot">Sua ficha</div>
+    <h3>Vai marcando conforme separa</h3>
+    <label><input type="checkbox"> Seu nome e como você quer ser chamada no site</label>
+    <label><input type="checkbox"> Uma frase de posicionamento: o que você faz e pra quem</label>
+    <label><input type="checkbox"> De 2 a 4 nichos que você atende</label>
+    <label><input type="checkbox"> Formatos que você entrega (Reels, unboxing, review, rotina...)</label>
+    <label><input type="checkbox"> De 3 a 6 vídeos seus já no YouTube, como não listado, com os links copiados</label>
+    <label><input type="checkbox"> Marcas com quem já trabalhou, se tiver</label>
+    <label><input type="checkbox"> Uma foto sua</label>
+    <label><input type="checkbox"> WhatsApp ou email de contato</label>
+  </div>
+
+  <h2 class="bloco">Por que YouTube "não listado"</h2>
+  <p>Não listado quer dizer que o vídeo <strong>não aparece no seu canal nem na busca</strong>. Só quem tem o link vê. É o jeito mais leve de colocar vídeo dentro de um site sem pesar a página e sem depender do Instagram.</p>
+  <ul class="passos">
+    <li><b>Sobe o vídeo no YouTube normalmente</b><p>Pelo computador ou pelo aplicativo, tanto faz.</p></li>
+    <li><b>Na hora da visibilidade, escolhe "Não listado"</b><p>Não é "privado". Privado ninguém vê, nem com o link.</p></li>
+    <li><b>Copia o link e guarda na sua ficha</b><p>Um link por vídeo, na ordem que você quer que apareçam.</p></li>
+  </ul>
+
+  <div class="aviso"><b>Faça isso na véspera, não na aula</b>
+    <p>Subir 5 vídeos leva de 10 a 40 minutos dependendo da sua internet. Se você começar isso às 10h da manhã, o bloco do portfólio vai embora. Chega com os links prontos.</p>
+  </div>
+
+  <div class="dica"><b>Não tem marca ainda?</b>
+    <p>Sem problema. Grava 3 vídeos autorais de produtos que você já usa em casa, do jeito que você entregaria pra uma marca. No portfólio isso entra como "projetos autorais" e funciona igual.</p>
+  </div>
+</section>
+
+<!-- ====== 5 ====== -->
+<section class="etapa" id="e5" data-parte="O portfólio" data-em="🎨" data-nome="Escolher o modelo">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 05</span><span>O portfólio</span><span class="hora">10h</span></div>
+    <h1>Escolha um modelo. Dez minutos, no máximo.</h1>
+    <p class="sub">Todos têm a mesma estrutura por baixo. O que muda é o estilo. Todos funcionam.</p>
+  </div>
+
+  <ul class="passos">
+    <li><b>Abre o site dos modelos</b><p><a href="https://eilaradam.github.io/portfolios-imersao/" target="_blank" rel="noopener">eilaradam.github.io/portfolios-imersao</a> · a senha é <strong>imersao</strong></p></li>
+    <li><b>Usa os filtros de cima</b><p>Papel, telas, colorido, retrô, clean. Escolhe a família que tem mais a ver com você e olha só ela.</p></li>
+    <li><b>Abre 3 favoritos e compara</b><p>Só três. Mais que isso você não decide.</p></li>
+    <li><b>Escolhe e não volta atrás</b><p>Dá pra mudar cor, fonte e ordem depois com um pedido. A escolha não é definitiva.</p></li>
+  </ul>
+
+  <div class="dica"><b>Escolhe pelo olho da marca, não pelo seu</b>
+    <p>A pergunta não é "qual eu acho mais bonito". É "qual desses a marca do meu nicho gostaria de receber". Quem faz decoração e quem faz finanças não escolhem o mesmo.</p>
+  </div>
+
+  <div class="check" data-check="e5">
+    <div class="rot">Checkpoint</div>
+    <h3>Antes de seguir</h3>
+    <label><input type="checkbox"> Entrei no site com a senha</label>
+    <label><input type="checkbox"> Escolhi o meu modelo</label>
+  </div>
+</section>
+
+<!-- ====== 6 ====== -->
+<section class="etapa" id="e6" data-parte="O portfólio" data-em="✨" data-nome="Gerar o portfólio">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 06</span><span>O portfólio</span><span class="hora">10h20</span></div>
+    <h1>Você não escreve o prompt. Você preenche e copia.</h1>
+    <p class="sub">O site dos modelos monta o prompt com as suas informações. Seu trabalho é preencher direito.</p>
+  </div>
+
+  <ul class="passos">
+    <li><b>Clica no modelo que você escolheu</b><p>Abre uma janela com o prompt do lado esquerdo e os campos do lado direito.</p></li>
+    <li><b>Preenche os campos da direita</b><p>Nome, Instagram, posicionamento, nichos, formatos, links dos vídeos, marcas, contato. É a sua ficha da etapa 04.</p></li>
+    <li><b>Confere o prompt da esquerda</b><p>Ele vai mudando enquanto você digita. No fim, as suas informações estão lá dentro.</p></li>
+    <li><b>Clica em copiar</b><p>O prompt inteiro vai pra sua área de transferência.</p></li>
+    <li><b>Cola no Claude Code e manda</b><p>Ele vai começar a criar os arquivos. Isso leva alguns minutos. Deixa trabalhar.</p></li>
+  </ul>
+
+  <div class="aviso"><b>Não interrompa no meio</b>
+    <p>Enquanto ele constrói, não mande outro pedido. Espera ele dizer que terminou. Se você mandar coisa nova no meio, ele larga o que estava fazendo pela metade.</p>
+  </div>
+
+  <h2 class="bloco">O que você deve ver quando terminar</h2>
+  <div class="telinha">
+    <div class="barra"><i></i><i></i><i></i><span>arquivo local · index.html</span></div>
+    <div class="corpo">
+      <span class="fk t"></span><span class="fk m"></span><span class="fk s"></span>
+      <div class="fkgrid"><div class="fkv">▶</div><div class="fkv">▶</div><div class="fkv">▶</div></div>
+      <span class="fkb">Falar comigo</span>
+    </div>
+    <div class="legenda">Seu portfólio abrindo no navegador, com o seu nome e os seus vídeos. Ainda só no seu computador.</div>
+  </div>
+
+  <div class="check" data-check="e6">
+    <div class="rot">Checkpoint</div>
+    <h3>O portfólio nasceu</h3>
+    <label><input type="checkbox"> O Claude terminou e disse que está pronto</label>
+    <label><input type="checkbox"> Abri no navegador e a página carregou</label>
+    <label><input type="checkbox"> Meu nome está lá</label>
+    <label><input type="checkbox"> Meus vídeos aparecem e tocam</label>
+  </div>
+</section>
+
+<!-- ====== 7 ====== -->
+<section class="etapa" id="e7" data-parte="O portfólio" data-em="🖌️" data-nome="Deixar com a sua cara">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 07</span><span>O portfólio</span><span class="hora">11h</span></div>
+    <h1>Agora o ajuste fino. Um pedido por vez.</h1>
+    <p class="sub">Abre o site inteiro, anota tudo que quer mudar numa lista, e aí pede um de cada vez. Copia os prompts abaixo e troca o que está marcado.</p>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · trocar a cor</span><button class="copiar">Copiar</button></div>
+    <pre>No meu portfólio, troca a cor principal para <mark>[A COR QUE VOCÊ QUER, por exemplo: terracota, verde oliva, azul petróleo]</mark>.
+Mexe só nas cores. Não muda os textos, não muda a ordem das seções e não tira nada da página.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · reescrever a apresentação</span><button class="copiar">Copiar</button></div>
+    <pre>Reescreve a minha apresentação do topo do site.
+Quero no máximo duas linhas, direto ao ponto, dizendo o que eu faço e pra quem.
+Minha versão atual é: <mark>[COLA AQUI O QUE ESTÁ ESCRITO HOJE]</mark>
+Não mexe em mais nada da página.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · trocar os vídeos em destaque</span><button class="copiar">Copiar</button></div>
+    <pre>Troca os três conteúdos em destaque do meu portfólio.
+
+Vídeo 1: link <mark>[LINK]</mark>, número em destaque <mark>[EX: 2,4 milhões de views]</mark>, título <mark>[NOME DA CAMPANHA]</mark>, nicho <mark>[NICHO]</mark>
+Vídeo 2: link <mark>[LINK]</mark>, número em destaque <mark>[...]</mark>, título <mark>[...]</mark>, nicho <mark>[...]</mark>
+Vídeo 3: link <mark>[LINK]</mark>, número em destaque <mark>[...]</mark>, título <mark>[...]</mark>, nicho <mark>[...]</mark>
+
+Não mexe no resto da página.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · mudar a ordem das seções</span><button class="copiar">Copiar</button></div>
+    <pre>Muda a ordem das seções do meu portfólio para esta:
+<mark>[EX: capa, vídeos em destaque, sobre mim, trabalhos por nicho, serviços, números, contato]</mark>
+Só a ordem. Não muda o conteúdo nem o visual de nenhuma delas.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · colocar as minhas fotos</span><button class="copiar">Copiar</button></div>
+    <pre>Coloquei as fotos <mark>[NOMES DOS ARQUIVOS]</mark> na pasta do projeto.
+Usa elas no lugar dos blocos de cor: <mark>[DIZ QUAL FOTO VAI EM QUAL LUGAR]</mark>.
+Deixa elas leves pra página não ficar lenta.</pre>
+  </div>
+
+  <div class="aviso"><b>Quebrou depois de um ajuste?</b>
+    <p>Acontece e tem conserto. Não tenta arrumar na mão. Copia o prompt abaixo.</p>
+  </div>
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · voltar atrás</span><button class="copiar">Copiar</button></div>
+    <pre>Isso quebrou depois da última mudança.
+Volta pra última versão que estava funcionando e me explica, em português simples, o que foi que quebrou.</pre>
+  </div>
+</section>
+
+<!-- ====== 8 ====== -->
+<section class="etapa" id="e8" data-parte="O portfólio" data-em="📱" data-nome="Testar no celular">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 08</span><span>O portfólio</span><span class="hora">11h30</span></div>
+    <h1>A marca vai abrir o seu link no celular, no meio de outra coisa.</h1>
+    <p class="sub">Se ele não aguentar isso, o resto não importa. Esse teste leva dois minutos.</p>
+  </div>
+
+  <div class="check" data-check="e8">
+    <div class="rot">Checkpoint</div>
+    <h3>No celular, de verdade</h3>
+    <label><input type="checkbox"> Abre em menos de 3 segundos</label>
+    <label><input type="checkbox"> Os vídeos tocam sem abrir outro aplicativo</label>
+    <label><input type="checkbox"> O botão de WhatsApp fica sempre visível</label>
+    <label><input type="checkbox"> Nada está cortado e não preciso dar zoom em nada</label>
+    <label><input type="checkbox"> Li todos os textos sem apertar os olhos</label>
+  </div>
+
+  <div class="dica"><b>Como testar antes de publicar</b>
+    <p>Pede pro Claude: <em>"me mostra como eu vejo esse site no tamanho de celular aqui no meu computador"</em>. Depois que publicar, aí sim manda o link pra você mesma no WhatsApp e abre no celular de verdade.</p>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · arrumar o celular</span><button class="copiar">Copiar</button></div>
+    <pre>No celular, <mark>[DIZ O QUE ESTÁ ERRADO: o texto do topo está cortado / os vídeos ficam minúsculos / o botão some]</mark>.
+Arruma só isso, e só no tamanho de celular. No computador está bom, não mexe.</pre>
+  </div>
+</section>
+
+<!-- ====== 9 ====== -->
+<section class="etapa" id="e9" data-parte="O portfólio" data-em="🚀" data-nome="Colocar no ar">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 09</span><span>O portfólio</span><span class="hora">11h40</span></div>
+    <h1>Do seu computador pro ar.</h1>
+    <p class="sub">Um site na internet precisa de três coisas: os arquivos, um lugar que fica ligado 24 horas guardando eles, e um endereço. As três saem de graça hoje.</p>
+  </div>
+
+  <div class="diagrama">
+    <div class="peca"><span class="ic">📄</span><h3>Arquivos</h3><p>O que o Claude criou. Hoje só existe no seu computador</p></div>
+    <div class="seta">→</div>
+    <div class="peca meio"><span class="ic">📦</span><h3>GitHub</h3><p>Guarda os arquivos e entrega pra quem pedir</p></div>
+    <div class="seta">→</div>
+    <div class="peca"><span class="ic">🔗</span><h3>Endereço</h3><p>O link que você manda pra marca</p></div>
+  </div>
+
+  <h2 class="bloco">Caminho A: pedindo pro Claude</h2>
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · publicar</span><button class="copiar">Copiar</button></div>
+    <pre>Publica esse projeto no GitHub:
+cria um repositório público chamado <mark>[NOME, por exemplo: portfolio]</mark>, sobe os arquivos e liga o GitHub Pages na branch main.
+No final, me manda o endereço do site.</pre>
+  </div>
+  <p>Ele faz tudo e te devolve um endereço tipo <span style="font-family:var(--fm)">seunome.github.io/portfolio</span>. Pode levar 1 ou 2 minutos pra abrir na primeira vez. Se der erro de permissão ou de login, vai pro caminho B.</p>
+
+  <h2 class="bloco">Caminho B: pelo site do GitHub, na mão</h2>
+  <p>Seis cliques, igual no Mac e no Windows, sem depender de nada instalado. Se o caminho A travar, faz por aqui e segue o dia.</p>
+  <ul class="passos">
+    <li><b>Cria o repositório</b><p>Em <span style="font-family:var(--fm)">github.com</span>, botão <span style="font-family:var(--fm)">New repository</span>. Dá um nome, deixa em <span style="font-family:var(--fm)">Public</span> e cria.</p></li>
+    <li><b>Sobe os arquivos</b><p>Na tela do repositório vazio, clica em <span style="font-family:var(--fm)">uploading an existing file</span> e arrasta os arquivos da pasta.</p></li>
+    <li><b>Confirma</b><p>Botão verde <span style="font-family:var(--fm)">Commit changes</span> no fim da página.</p></li>
+    <li><b>Abre as configurações</b><p>Menu <span style="font-family:var(--fm)">Settings</span>, depois <span style="font-family:var(--fm)">Pages</span> na lista da esquerda.</p></li>
+    <li><b>Liga o Pages</b><p>Em Source: <span style="font-family:var(--fm)">Deploy from a branch</span> · branch <span style="font-family:var(--fm)">main</span> · pasta <span style="font-family:var(--fm)">/ (root)</span>. Salva.</p></li>
+    <li><b>Espera e recarrega</b><p>Uns 2 minutos. O endereço do seu site aparece no topo dessa mesma tela.</p></li>
+  </ul>
+
+  <div class="certo"><b>Depois da primeira vez, nunca mais na mão</b>
+    <p>Daqui pra frente, toda mudança é só pedir: <em>"publica a versão nova"</em>. Ele sobe tudo sozinho.</p>
+  </div>
+
+  <div class="check" data-check="e9">
+    <div class="rot">Checkpoint · 12h</div>
+    <h3>Seu portfólio está no ar</h3>
+    <label><input type="checkbox"> Tenho o link e ele abre num navegador</label>
+    <label><input type="checkbox"> Mandei pra alguém e abriu no aparelho da pessoa</label>
+    <label><input type="checkbox"> Abri no meu celular e ficou bom</label>
+    <label><input type="checkbox"> O botão de WhatsApp leva pro meu número de verdade</label>
+    <label><input type="checkbox"> Salvei o link e o nome da pasta do projeto num lugar seguro</label>
+  </div>
+</section>
+
+<!-- ====== 10 ====== -->
+<section class="etapa" id="e10" data-parte="O portfólio" data-em="🌐" data-nome="Seu domínio próprio">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 10</span><span>O portfólio</span><span class="hora">Opcional</span></div>
+    <h1>Um endereço com o seu nome.</h1>
+    <p class="sub">Opcional e pago, mas muda como a marca te vê. Nada do que a gente construiu muda: é só trocar a placa da porta.</p>
+  </div>
+
+  <div class="cards c2">
+    <div class="card"><div class="rot">Hoje · grátis</div><h3>seunome.github.io/portfolio</h3><p>Já serve pra mandar pra marca agora. Funciona igual, é só mais comprido.</p></div>
+    <div class="card forte"><div class="rot">Quando quiser · pago</div><h3>seunome.com.br</h3><p>Custa por ano, aponta pro mesmo site. Vale quando você começa a mandar pra marca toda semana.</p></div>
+  </div>
+
+  <ul class="passos">
+    <li><b>Compra o domínio</b><p>Em qualquer lugar que venda: Hostinger, Registro.br, GoDaddy. O nome mais curto e fácil de falar em voz alta ganha.</p></li>
+    <li><b>Pede pro Claude te guiar</b><p>Usa o prompt abaixo. Ele te diz exatamente o que criar no painel de onde você comprou.</p></li>
+    <li><b>Cria os registros no painel</b><p>São duas ou três linhas de configuração. Você copia e cola o que ele mandar.</p></li>
+    <li><b>Espera</b><p>Pode levar de 10 minutos a 24 horas pra funcionar. É normal e não tem o que acelerar.</p></li>
+  </ul>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · conectar o domínio</span><button class="copiar">Copiar</button></div>
+    <pre>Quero usar o domínio <mark>[SEUSITE.COM.BR]</mark> no meu site que está no GitHub Pages.
+Comprei o domínio na <mark>[ONDE VOCÊ COMPROU]</mark>.
+Me diz exatamente quais registros eu preciso criar lá no painel, um por um, e configura o que for do lado do GitHub.</pre>
+  </div>
+
+  <div class="aviso"><b>Não se assusta se demorar</b>
+    <p>Depois de configurar, o endereço pode ficar algumas horas dando erro. Isso é a internet levando o seu endereço novo pro mundo todo. Não mexe mais, só espera.</p>
+  </div>
+</section>
+
+<!-- ====== 11 ====== -->
+<section class="etapa" id="e11" data-parte="O admin" data-em="🧩" data-nome="As três peças">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 11</span><span>O admin</span><span class="hora">14h</span></div>
+    <h1>O site é o que a marca vê. O admin é o que você usa.</h1>
+    <p class="sub">Antes de construir, entende as três peças. Isso te poupa duas horas de confusão depois.</p>
+  </div>
+
+  <div class="diagrama">
+    <div class="peca"><span class="onde">Mora no GitHub</span><span class="ic">🌍</span><h3>Site</h3><p>O que a marca vê. Lê os dados do banco e mostra</p></div>
+    <div class="seta">↔</div>
+    <div class="peca meio"><span class="onde">Mora no Supabase</span><span class="ic">🗄️</span><h3>Banco</h3><p>Vídeos, leads, calendário, campanhas. Tudo que muda fica aqui</p></div>
+    <div class="seta">↔</div>
+    <div class="peca"><span class="onde">Mora no GitHub</span><span class="ic">🔐</span><h3>Admin</h3><p>O que só você abre, com login. Escreve no banco</p></div>
+  </div>
+
+  <p><strong>Você edita no admin, o admin grava no banco, o site lê do banco.</strong> É por isso que o site muda sem você tocar em código nunca mais.</p>
+
+  <h2 class="bloco">O que o admin faz por você</h2>
+  <div class="cards c3">
+    <div class="card"><div class="rot">Ela muda o site</div><h3>🎬 Sem código</h3><p>Você troca vídeo, nicho e texto no admin. O site atualiza sozinho.</p></div>
+    <div class="card"><div class="rot">Ela recebe</div><h3>📬 Os leads</h3><p>O formulário do portfólio passa a chegar aqui, com nome, marca e mensagem.</p></div>
+    <div class="card"><div class="rot">Ela organiza</div><h3>🗓️ A sua rotina</h3><p>Calendário do que grava e posta, campanhas em andamento, checklist do portfólio.</p></div>
+  </div>
+</section>
+
+<!-- ====== 12 ====== -->
+<section class="etapa" id="e12" data-parte="O admin" data-em="🔑" data-nome="Supabase sem medo">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 12</span><span>O admin</span><span class="hora">14h20</span></div>
+    <h1>Supabase é uma planilha na nuvem que o site consegue ler e escrever.</h1>
+    <p class="sub">É só isso. E tem duas coisas aqui que você precisa entender direito, porque é onde dá pra se machucar.</p>
+  </div>
+
+  <div class="cards c2">
+    <div class="card"><div class="rot">O que são</div><h3>📊 Tabelas</h3><p>Cada coisa que muda vira uma tabela: <span style="font-family:var(--fm)">videos</span>, <span style="font-family:var(--fm)">leads</span>, <span style="font-family:var(--fm)">calendario</span>, <span style="font-family:var(--fm)">campanhas</span>. Cada linha é um item. O Claude cria pra você.</p></div>
+    <div class="card"><div class="rot">Quem entra</div><h3>🚪 Login</h3><p>O Supabase também cuida de quem pode abrir o admin. Você cria seu usuário e senha lá.</p></div>
+  </div>
+
+  <h2 class="bloco">As duas chaves, e elas são bem diferentes</h2>
+  <div class="cards c2">
+    <div class="card"><div class="rot" style="color:var(--green)">Pode aparecer</div><h3>🔓 Chave pública</h3><p>Vai dentro do código do site e <strong>tudo bem</strong>. Ela nasceu pra ficar visível. Você vai ver ela no seu repositório do GitHub, à vista de todo mundo, e está certo assim.</p></div>
+    <div class="card forte"><div class="rot">Nunca, em lugar nenhum</div><h3>🔒 Chave secreta</h3><p>Essa nunca sai do painel do Supabase. Não vai no site, não vai no GitHub, não vai no grupo. Se ela escapar, qualquer pessoa lê e apaga tudo o que é seu.</p></div>
+  </div>
+
+  <div class="aviso"><b>Como não errar</b>
+    <p>No painel do Supabase as duas ficam lado a lado. A secreta costuma vir escondida atrás de um botão de "revelar" e com um aviso em volta. Se você precisou clicar pra revelar, <strong>é a errada</strong>. Na dúvida, pergunta pro Claude qual das duas ele está pedindo e por quê.</p>
+  </div>
+
+  <h2 class="bloco">A tranca de verdade: RLS</h2>
+  <p>Essa é a parte que quase todo mundo pula, e é a mais importante da tarde.</p>
+  <p><strong>A tela de login não protege os seus dados.</strong> Ela só decide quem vê a página bonita. Como a chave pública está no site, alguém pode falar direto com o banco sem nem passar pela sua tela de login. Se não tiver mais nada no caminho, essa pessoa lê todos os seus leads e apaga todas as suas campanhas.</p>
+  <p>O que impede isso é o <strong>RLS</strong>: uma regra dentro do Supabase que diz "só a dona desses dados enxerga esses dados". É a tranca. O login é só a porta.</p>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · ligar a tranca</span><button class="copiar">Copiar</button></div>
+    <pre>Liga o RLS em todas as tabelas desse projeto no Supabase.
+A regra: só o meu usuário logado pode ler e escrever os meus dados. Ninguém deslogado pode ler nada.
+Depois me explica, em português simples, como eu testo se a tranca funcionou de verdade.</pre>
+  </div>
+
+  <div class="check" data-check="e12">
+    <div class="rot">Checkpoint</div>
+    <h3>Antes de colocar dado de verdade lá dentro</h3>
+    <label><input type="checkbox"> Sei qual é a chave pública e qual é a secreta</label>
+    <label><input type="checkbox"> A chave secreta não está em nenhum arquivo do meu projeto</label>
+    <label><input type="checkbox"> Pedi pro Claude ligar o RLS em todas as tabelas</label>
+    <label><input type="checkbox"> Testei do jeito que ele me ensinou e a tranca funcionou</label>
+  </div>
+</section>
+
+<!-- ====== 13 ====== -->
+<section class="etapa" id="e13" data-parte="O admin" data-em="🏗️" data-nome="Construir o admin">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 13</span><span>O admin</span><span class="hora">14h30</span></div>
+    <h1>Primeiro a porta. Depois os cômodos.</h1>
+    <p class="sub">O admin também sai de um prompt pronto. Ele é longo e demora. Deixa trabalhar e acompanha.</p>
+  </div>
+
+  <ul class="passos">
+    <li><b>Abre a página do admin</b><p>O link vem no grupo na hora. O prompt já sabe que o seu portfólio está no GitHub e que o banco é o Supabase.</p></li>
+    <li><b>Cola no Claude Code, na mesma pasta do portfólio</b><p>Mesma pasta. Não cria pasta nova, senão o admin não acha o site.</p></li>
+    <li><b>Ele vai pedir as chaves do Supabase</b><p>A pública. Revisa a etapa 12 se bater dúvida.</p></li>
+    <li><b>Cria seu usuário no painel do Supabase</b><p>Email e senha. Anota num lugar seguro, porque é com isso que você entra todo dia.</p></li>
+    <li><b>Liga o RLS</b><p>Antes de colocar qualquer dado real. O prompt da etapa 12 faz isso.</p></li>
+  </ul>
+
+  <h2 class="bloco">Testa a porta antes de seguir</h2>
+  <div class="check" data-check="e13">
+    <div class="rot">Checkpoint</div>
+    <h3>O login funciona</h3>
+    <label><input type="checkbox"> Entrei no admin com meu email e senha</label>
+    <label><input type="checkbox"> Saí e entrei de novo</label>
+    <label><input type="checkbox"> Tentei com senha errada e ele me barrou</label>
+  </div>
+
+  <h2 class="bloco">O teste que prova que tudo funcionou</h2>
+  <p>Esse é o momento em que a ficha cai. Você muda no admin e o site muda sozinho.</p>
+  <ul class="passos">
+    <li><b>No admin, adiciona um vídeo</b><p>Link do YouTube e o nicho. Salva.</p></li>
+    <li><b>Abre o site num navegador</b><p>O vídeo tem que estar lá, sem você publicar nada.</p></li>
+    <li><b>Volta no admin e edita o título</b><p>Recarrega o site. Mudou.</p></li>
+    <li><b>Apaga o vídeo de teste</b><p>Sumiu do site. Pronto, as três peças estão conversando.</p></li>
+  </ul>
+
+  <div class="aviso"><b>Mudou no admin e o site não mudou?</b>
+    <p>Quase sempre é porque o site ainda está lendo os vídeos do arquivo em vez de ler do banco. Copia o prompt abaixo.</p>
+  </div>
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · fazer o site ler do banco</span><button class="copiar">Copiar</button></div>
+    <pre>O meu site ainda está lendo os vídeos do arquivo main.js.
+Faz ele ler da tabela de vídeos do Supabase, pra que o que eu editar no admin apareça no site sem publicar de novo.</pre>
+  </div>
+</section>
+
+<!-- ====== 14 ====== -->
+<section class="etapa" id="e14" data-parte="O admin" data-em="📬" data-nome="Formulário e as outras abas">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 14</span><span>O admin</span><span class="hora">15h30</span></div>
+    <h1>Agora o formulário do site chega em algum lugar.</h1>
+    <p class="sub">Até aqui, quem preenchia o seu formulário caía no vazio. Isso acaba agora.</p>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · ligar o formulário</span><button class="copiar">Copiar</button></div>
+    <pre>Liga o formulário de contato do meu site à tabela leads do Supabase
+e cria uma aba no admin que mostra os leads recebidos com nome, marca, mensagem e data, do mais novo pro mais antigo.
+Garante que o RLS está ligado nessa tabela também.</pre>
+  </div>
+
+  <ul class="passos">
+    <li><b>Abre o seu site e preenche o formulário</b><p>Com os seus próprios dados mesmo, como se você fosse uma marca.</p></li>
+    <li><b>Abre o admin</b><p>O lead tem que estar lá: nome, marca, mensagem, data.</p></li>
+    <li><b>Apaga o lead de teste</b><p>Pra sua lista começar limpa.</p></li>
+  </ul>
+
+  <h2 class="bloco">As abas de organização</h2>
+  <div class="cards c2">
+    <div class="card"><div class="rot">Aba</div><h3>🗓️ Calendário</h3><p>O que você grava, edita e posta, por semana. Cada item tem marca, tipo, data e status.</p></div>
+    <div class="card"><div class="rot">Aba</div><h3>📊 Organização de Campanha</h3><p>Cada campanha do briefing ao pagamento: marca, prazo, status, valor e observações.</p></div>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · criar uma aba nova</span><button class="copiar">Copiar</button></div>
+    <pre>Cria no meu admin a aba <mark>[CALENDÁRIO ou ORGANIZAÇÃO DE CAMPANHA]</mark>.
+Os campos que eu preciso são: <mark>[LISTA OS CAMPOS DO SEU JEITO]</mark>.
+Salva tudo no Supabase, com RLS ligado, e deixa simples. Depois eu peço mais campo se sentir falta.</pre>
+  </div>
+
+  <div class="dica"><b>Regra de ouro das abas</b>
+    <p>Primeiro faz funcionar simples. Campo a mais você adiciona quando sentir falta, não antes. Aba cheia de campo que ninguém preenche é aba que você abandona em duas semanas.</p>
+  </div>
+
+  <div class="check" data-check="e14">
+    <div class="rot">Checkpoint · 16h</div>
+    <h3>O mínimo do dia</h3>
+    <label><input type="checkbox"> Entro no admin com meu login e ninguém mais</label>
+    <label><input type="checkbox"> Adiciono um vídeo no admin e ele aparece no site</label>
+    <label><input type="checkbox"> Preencho o formulário do site e o lead chega no admin</label>
+    <label><input type="checkbox"> O admin abre pelo link, não só no meu computador</label>
+  </div>
+  <div class="check" data-check="e14b" style="border-color:var(--line)">
+    <div class="rot" style="color:var(--muted)">Se deu tempo</div>
+    <h3>O extra</h3>
+    <label><input type="checkbox"> Calendário abre e salva</label>
+    <label><input type="checkbox"> Organização de Campanha abre e salva</label>
+    <label><input type="checkbox"> Checklist Portfólio está no admin</label>
+  </div>
+  <div class="certo"><b>Ticou a lista de cima?</b>
+    <p>Seu dia deu certo. A de baixo dá pra terminar com calma depois, e esse guia fica com você.</p>
+  </div>
+</section>
+
+<!-- ====== 15 ====== -->
+<section class="etapa" id="e15" data-parte="Quando trava" data-em="🆘" data-nome="Quando trava">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 15</span><span>Quando trava</span></div>
+    <h1>Vai travar. Com todo mundo trava.</h1>
+    <p class="sub">Erro não é sinal de que você fez errado. É parte do processo. O que muda é o que você faz depois.</p>
+  </div>
+
+  <h2 class="bloco">A escadinha: tenta na ordem</h2>
+  <ul class="passos">
+    <li><b>Cola o erro inteiro pro Claude</b><p>Inteiro mesmo, com as partes feias. Resolve a maioria dos casos.</p></li>
+    <li><b>Manda ele voltar atrás</b><p>Se o conserto piorou, volta pra última versão que funcionava e recomeça de lá.</p></li>
+    <li><b>Pede pra ele explicar antes de mexer</b><p>Às vezes o problema não é o código, é o que você pediu. Ouvir a explicação resolve.</p></li>
+    <li><b>Chama no grupo</b><p>Com o print e dizendo em que etapa você está. O erro de uma serve pra todas.</p></li>
+  </ul>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · apareceu um erro</span><button class="copiar">Copiar</button></div>
+    <pre>Apareceu esse erro: <mark>[COLA O ERRO INTEIRO AQUI]</mark>
+Me explica em português simples o que aconteceu, arruma, e me diz o que eu faço pra não acontecer de novo.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="top"><span class="lbl">Prompt · entender antes de mexer</span><button class="copiar">Copiar</button></div>
+    <pre>Antes de mexer em qualquer coisa: me explica o que está acontecendo e o que você pretende fazer.
+Eu não programo, então explica como se fosse pra alguém que nunca viu código. Só age depois que eu responder.</pre>
+  </div>
+
+  <h2 class="bloco">Os quatro erros mais comuns do dia</h2>
+  <div class="cards c2">
+    <div class="card"><div class="rot">Publicar</div><h3>"Não consigo criar o repositório"</h3><p>Login do GitHub não conectado. Vai pro caminho B da etapa 09 e faz pelo site. Funciona igual.</p></div>
+    <div class="card"><div class="rot">Publicar</div><h3>"Publiquei e o link dá erro 404"</h3><p>Quase sempre é pressa. Espera 2 minutos e recarrega. Se continuar, confere se o Pages está na branch main e na pasta raiz.</p></div>
+    <div class="card"><div class="rot">Admin</div><h3>"Mudo no admin e o site não muda"</h3><p>O site ainda lê do arquivo, não do banco. Prompt pronto no fim da etapa 13.</p></div>
+    <div class="card"><div class="rot">Admin</div><h3>"Não consigo entrar no admin"</h3><p>Confere se você criou o usuário no painel do Supabase. Criar a página de login não cria o usuário.</p></div>
+  </div>
+
+  <div class="dica"><b>Ninguém fica pra trás</b>
+    <p>A aula está gravada, esse guia fica no ar e o grupo continua depois da imersão. Se hoje não deu, dá amanhã.</p>
+  </div>
+</section>
+
+<!-- ====== 16 ====== -->
+<section class="etapa" id="e16" data-parte="Quando trava" data-em="📋" data-nome="Todos os prompts">
+  <div class="cab">
+    <div class="trilha"><span class="n">Etapa 16</span><span>Quando trava</span></div>
+    <h1>Todos os prompts, num lugar só.</h1>
+    <p class="sub">Pra quando você já souber o que quer e não precisar ler a etapa inteira de novo. Troca o que está marcado e cola no Claude Code.</p>
+  </div>
+  <div id="cofre"></div>
+  <div class="dica"><b>Guarda essa página</b>
+    <p>Daqui a um mês, quando você for trocar os vídeos do portfólio ou criar uma aba nova, é aqui que você volta.</p>
+  </div>
+
+  <h2 class="bloco">Acabou. E agora?</h2>
+  <div class="cards c3">
+    <div class="card forte"><div class="rot">Hoje, antes de dormir</div><h3>📤 Manda pra uma marca</h3><p>Escolhe uma marca com quem você já queria trabalhar e manda o link. Hoje mesmo. O portfólio só existe pra isso.</p></div>
+    <div class="card"><div class="rot">Amanhã de manhã</div><h3>🎯 Chega com 5 marcas</h3><p>Uma lista de 5 marcas que você queria muito fechar. O Dia 2 é sobre abordagem, proposta e envio.</p></div>
+    <div class="card"><div class="rot">Sempre que precisar</div><h3>💬 Travou? Chama no grupo</h3><p>Com o print e dizendo em que etapa você está. Essa apostila fica no ar e o grupo continua depois da imersão.</p></div>
+  </div>
+</section>
+
+<nav class="nav" id="navFim"></nav>
+</main>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+var etapas = [].slice.call(document.querySelectorAll('.etapa'));
+var CHAVE = 'guia-imersao:v1';
+var estado = { feitos: {}, ultima: 'e1' };
+
+function ler(){
+  try{ var b = localStorage.getItem(CHAVE); if(b) estado = JSON.parse(b); }catch(e){}
+  if(!estado.feitos) estado.feitos = {};
+}
+function salvar(){
+  try{ localStorage.setItem(CHAVE, JSON.stringify(estado)); }catch(e){}
+}
+/* le AGORA, antes de montar qualquer coisa: o bloco do progresso
+   logo abaixo ja precisa do que estava salvo pra remarcar as caixinhas */
+ler();
+
+/* ---------- menu ---------- */
+var nav = document.getElementById('nav');
+(function montarMenu(){
+  var parteAtual = '', html = '', lista = '';
+  etapas.forEach(function(s, i){
+    var p = s.dataset.parte;
+    if(p !== parteAtual){
+      if(lista) html += '<ol>' + lista + '</ol>';
+      lista = '';
+      html += '<div class="parte">' + p + '</div>';
+      parteAtual = p;
+    }
+    lista += '<li><a href="#' + s.id + '" data-ir="' + s.id + '">' +
+             '<span class="em">' + s.dataset.em + '</span>' +
+             '<span>' + (i+1) + '. ' + s.dataset.nome + '</span>' +
+             '<span class="ok" data-ok="' + s.id + '"></span></a></li>';
+  });
+  if(lista) html += '<ol>' + lista + '</ol>';
+  nav.innerHTML = html;
+})();
+
+/* ---------- navegacao ---------- */
+var menu = document.getElementById('menu');
+function fecharMenu(){ menu.classList.remove('aberto'); }
+document.getElementById('abrir').onclick = function(){ menu.classList.toggle('aberto'); };
+document.getElementById('fechar').onclick = fecharMenu;
+
+function indice(id){ for(var i=0;i<etapas.length;i++){ if(etapas[i].id===id) return i; } return 0; }
+
+function mostrar(id, semScroll){
+  var i = indice(id);
+  etapas.forEach(function(s,k){ s.classList.toggle('on', k===i); });
+  [].slice.call(nav.querySelectorAll('a')).forEach(function(a){
+    a.classList.toggle('on', a.dataset.ir === etapas[i].id);
+  });
+  document.getElementById('tituloTopo').textContent = (i+1) + '. ' + etapas[i].dataset.nome;
+  montarRodape(i);
+  estado.ultima = etapas[i].id; salvar();
+  fecharMenu();
+  if(!semScroll) window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  if(location.hash !== '#' + etapas[i].id) history.replaceState(null,'','#'+etapas[i].id);
+}
+
+var navFim = document.getElementById('navFim');
+function montarRodape(i){
+  var h = '';
+  if(i > 0){
+    h += '<button data-ir="'+etapas[i-1].id+'"><span class="r">Voltar</span><span class="n">'+ etapas[i-1].dataset.em +' '+ etapas[i-1].dataset.nome +'</span></button>';
+  } else {
+    h += '<button disabled><span class="r">Voltar</span><span class="n">Você está no começo</span></button>';
+  }
+  if(i < etapas.length-1){
+    h += '<button class="frente" data-ir="'+etapas[i+1].id+'"><span class="r">Próxima etapa</span><span class="n">'+ etapas[i+1].dataset.nome +' '+ etapas[i+1].dataset.em +'</span></button>';
+  } else {
+    h += '<button class="frente" data-ir="e1"><span class="r">Acabou</span><span class="n">Voltar ao começo 🧭</span></button>';
+  }
+  navFim.innerHTML = h;
+}
+
+document.addEventListener('click', function(e){
+  var alvo = e.target.closest('[data-ir]');
+  if(alvo){ e.preventDefault(); mostrar(alvo.dataset.ir); return; }
+  if(menu.classList.contains('aberto') && !e.target.closest('#menu') && !e.target.closest('#abrir')) fecharMenu();
+});
+window.addEventListener('hashchange', function(){
+  var id = location.hash.slice(1);
+  if(id && document.getElementById(id)) mostrar(id);
+});
+
+/* ---------- progresso ---------- */
+var todas = [].slice.call(document.querySelectorAll('.check input'));
+todas.forEach(function(inp, n){
+  var caixa = inp.closest('.check');
+  inp.dataset.id = caixa.dataset.check + ':' + n;
+  if(estado.feitos[inp.dataset.id]) inp.checked = true;
+  inp.addEventListener('change', function(){
+    if(inp.checked) estado.feitos[inp.dataset.id] = 1; else delete estado.feitos[inp.dataset.id];
+    salvar(); atualizar();
+    if(inp.checked) aviso('Salvo. Pode fechar e voltar depois.');
+  });
+});
+
+var aro = document.getElementById('aro'), VOLTA = 119.4;
+function atualizar(){
+  var feitos = todas.filter(function(i){ return i.checked; }).length;
+  var pc = todas.length ? Math.round(feitos / todas.length * 100) : 0;
+  document.getElementById('pct').textContent = pc + '%';
+  document.getElementById('pctSub').textContent = feitos + ' de ' + todas.length + ' marcados';
+  aro.setAttribute('stroke-dashoffset', VOLTA - VOLTA * pc / 100);
+  document.getElementById('barraMini').style.width = pc + '%';
+  etapas.forEach(function(s){
+    var ins = [].slice.call(s.querySelectorAll('.check input'));
+    var marca = nav.querySelector('[data-ok="' + s.id + '"]');
+    if(!marca) return;
+    marca.textContent = (ins.length && ins.every(function(i){ return i.checked; })) ? '✓' : '';
+  });
+}
+
+/* ---------- copiar ---------- */
+var toast = document.getElementById('toast'), relogio;
+function aviso(txt){
+  toast.textContent = txt; toast.classList.add('on');
+  clearTimeout(relogio); relogio = setTimeout(function(){ toast.classList.remove('on'); }, 2200);
+}
+function ligarCopia(raiz){
+  [].slice.call(raiz.querySelectorAll('.copiar')).forEach(function(b){
+    if(b.dataset.pronto) return;
+    b.dataset.pronto = '1';
+    b.addEventListener('click', function(){
+      var txt = b.closest('.prompt').querySelector('pre').innerText;
+      function ok(){
+        b.textContent = 'Copiado ✓'; b.classList.add('feito');
+        aviso('Prompt copiado. Cola no Claude Code.');
+        setTimeout(function(){ b.textContent = 'Copiar'; b.classList.remove('feito'); }, 2200);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok).catch(velho);
+      } else velho();
+      function velho(){
+        var ta = document.createElement('textarea');
+        ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); ok(); }catch(e){ aviso('Não deu pra copiar. Seleciona o texto na mão.'); }
+        document.body.removeChild(ta);
+      }
+    });
+  });
+}
+
+/* ---------- cofre de prompts ---------- */
+(function cofre(){
+  var destino = document.getElementById('cofre'), html = '';
+  etapas.forEach(function(s){
+    if(s.id === 'e16') return;
+    [].slice.call(s.querySelectorAll('.prompt')).forEach(function(p){
+      var c = p.cloneNode(true);
+      var lbl = c.querySelector('.lbl');
+      lbl.textContent = lbl.textContent + ' · etapa ' + (indice(s.id)+1);
+      html += c.outerHTML;
+    });
+  });
+  destino.innerHTML = html;
+})();
+
+/* ---------- pdf e recomecar ---------- */
+document.getElementById('pdf').addEventListener('click', function(){ window.print(); });
+document.getElementById('zerar').addEventListener('click', function(){
+  if(!confirm('Isso apaga todos os seus checkpoints e você começa do zero. Tem certeza?')) return;
+  try{ localStorage.removeItem(CHAVE); }catch(e){}
+  location.reload();
+});
+
+/* ---------- teclado ---------- */
+document.addEventListener('keydown', function(e){
+  if(e.target.matches('input,textarea')) return;
+  var i = indice(estado.ultima);
+  if(e.key === 'ArrowRight' && i < etapas.length-1) mostrar(etapas[i+1].id);
+  if(e.key === 'ArrowLeft' && i > 0) mostrar(etapas[i-1].id);
+  if(e.key === 'Escape') fecharMenu();
+});
+
+/* ---------- liga tudo ---------- */
+ligarCopia(document);
+atualizar();
+var inicial = location.hash.slice(1);
+mostrar(document.getElementById(inicial) ? inicial : (estado.ultima || 'e1'), true);
+/* o navegador rola sozinho ate a ancora do #e12 e corta o topo da etapa.
+   desfaz isso depois que ele terminou de rolar. */
+window.scrollTo(0,0);
+requestAnimationFrame(function(){ window.scrollTo(0,0); });
+window.addEventListener('load', function(){ window.scrollTo(0,0); });
+
+})();
+
+/* ================= porteira =================
+   mesma palavra do site dos modelos. a chave mora no mesmo
+   eilaradam.github.io, entao quem ja entrou la nao digita de novo. */
+(function(){
+  var portao = document.getElementById('portao');
+  var liberado = false;
+  try{ liberado = localStorage.getItem('imersaoOk') === '1'; }catch(e){}
+  if(liberado){ portao.classList.add('fora'); return; }
+
+  var form = document.getElementById('portaoForm');
+  var campo = document.getElementById('senha');
+  var erro = document.getElementById('portaoErro');
+  setTimeout(function(){ try{ campo.focus(); }catch(e){} }, 160);
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var v = campo.value.trim().toLowerCase().replace(/\s+/g, '');
+    if(v === 'imersao' || v === 'imersao2' || v === 'turma2'){
+      try{ localStorage.setItem('imersaoOk', '1'); }catch(e){}
+      portao.classList.add('fora');
+    } else {
+      erro.classList.add('on');
+      campo.select();
+    }
+  });
+})();
+</script>
+</body>
+</html>
