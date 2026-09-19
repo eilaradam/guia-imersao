@@ -378,7 +378,7 @@ ul.pontos li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;h
     <div class="card"><h3>👁️ Prévia</h3><p>O site aberto no seu navegador antes de ir pro ar. Só você vê.</p></div>
     <div class="card"><h3>📦 Repositório</h3><p>A cópia do projeto guardada no GitHub. É de lá que o site publica.</p></div>
     <div class="card"><h3>🚀 Publicar</h3><p>Mandar os arquivos pro ar. Depois disso qualquer pessoa abre pelo link.</p></div>
-    <div class="card"><h3>🗄️ Banco de dados</h3><p>Onde ficam os dados que mudam: seus vídeos, seus leads. Hoje é o Supabase.</p></div>
+    <div class="card"><h3>🗄️ Banco de dados</h3><p>Onde ficam as informações que mudam: seus vídeos, suas marcas, suas campanhas. Hoje é o Supabase.</p></div>
     <div class="card escuro"><h3>E acabou</h3><p>O resto ele explica quando aparecer. É só perguntar: <em style="background:rgba(255,145,102,.25);color:#FFB08C">explica isso como se eu nunca tivesse programado</em>.</p></div>
   </div>
 
@@ -730,7 +730,7 @@ Me diz exatamente quais registros eu preciso criar lá no painel, um por um, e c
   <div class="diagrama">
     <div class="peca"><span class="onde">Mora no GitHub</span><span class="ic">🌍</span><h3>Site</h3><p>O que a marca vê. Lê os dados do banco e mostra</p></div>
     <div class="seta">↔</div>
-    <div class="peca meio"><span class="onde">Mora no Supabase</span><span class="ic">🗄️</span><h3>Banco</h3><p>Vídeos, leads, calendário, campanhas. Tudo que muda fica aqui</p></div>
+    <div class="peca meio"><span class="onde">Mora no Supabase</span><span class="ic">🗄️</span><h3>Banco</h3><p>Vídeos, marcas, calendário, campanhas. Tudo que muda fica aqui</p></div>
     <div class="seta">↔</div>
     <div class="peca"><span class="onde">Mora no GitHub</span><span class="ic">🔐</span><h3>Admin</h3><p>O que só você abre, com login. Escreve no banco</p></div>
   </div>
@@ -740,7 +740,7 @@ Me diz exatamente quais registros eu preciso criar lá no painel, um por um, e c
   <h2 class="bloco">O que o admin faz por você</h2>
   <div class="cards c3">
     <div class="card"><div class="rot">Ela muda o site</div><h3>🎬 Sem código</h3><p>Você troca vídeo, nicho e texto no admin. O site atualiza sozinho.</p></div>
-    <div class="card"><div class="rot">Ela recebe</div><h3>📬 Os leads</h3><p>O formulário do portfólio passa a chegar aqui, com nome, marca e mensagem.</p></div>
+    <div class="card"><div class="rot">Ela recebe</div><h3>📬 Sua base de marcas</h3><p>Quem preenche o formulário do portfólio cai aqui como lead, e você vai movendo até virar cliente.</p></div>
     <div class="card"><div class="rot">Ela organiza</div><h3>🗓️ A sua rotina</h3><p>Calendário do que grava e posta, campanhas em andamento, checklist do portfólio.</p></div>
   </div>
 </section>
@@ -846,8 +846,8 @@ Faz ele ler da tabela de vídeos do Supabase, pra que o que eu editar no admin a
 
   <div class="prompt">
     <div class="top"><span class="lbl">Prompt · ligar o formulário</span><button class="copiar">Copiar</button></div>
-    <pre>Liga o formulário de contato do meu site à tabela leads do Supabase
-e cria uma aba no admin que mostra os leads recebidos com nome, marca, mensagem e data, do mais novo pro mais antigo.
+    <pre>Liga o formulário de contato do meu site à tabela marcas do Supabase, entrando como situação "Lead".
+Na aba Marcas do admin, mostra a base em planilha com marca, instagram, e-mail, telefone, situação, observação e último contato, com busca, filtro por situação e um botão de baixar em CSV.
 Garante que o RLS está ligado nessa tabela também.</pre>
   </div>
 
@@ -859,9 +859,10 @@ Garante que o RLS está ligado nessa tabela também.</pre>
 
   <h2 class="bloco">As abas de organização</h2>
   <div class="cards c2">
+    <div class="card"><div class="rot">Aba</div><h3>🤝 Marcas</h3><p>Sua base de contatos de empresa, em planilha: quem é lead, quem está conversando e quem já virou cliente. Dá pra baixar.</p></div>
     <div class="card"><div class="rot">Aba</div><h3>🗓️ Calendário</h3><p>O que você grava, edita e posta, por semana. Cada item tem marca, tipo, data e status.</p></div>
     <div class="card"><div class="rot">Aba</div><h3>📈 Métricas do portfólio</h3><p>Quantas pessoas abriram, o que mais olharam e de onde vieram. É o que te diz qual nicho está puxando mais.</p></div>
-    <div class="card"><div class="rot">Aba</div><h3>📊 Organização de Campanha</h3><p>Cada campanha do briefing ao pagamento: marca, prazo, status, valor e observações.</p></div>
+    <div class="card"><div class="rot">Aba</div><h3>📊 Campanhas</h3><p>Cada campanha do briefing ao pagamento: marca, prazo, status, valor e observações.</p></div>
   </div>
 
   <div class="prompt">
@@ -887,7 +888,7 @@ Salva tudo no Supabase, com RLS ligado, e deixa simples. Depois eu peço mais ca
     <div class="rot" style="color:var(--muted)">Se deu tempo</div>
     <h3>O extra</h3>
     <label><input type="checkbox"> Calendário abre e salva</label>
-    <label><input type="checkbox"> Organização de Campanha abre e salva</label>
+    <label><input type="checkbox"> Campanhas abre e salva</label>
     <label><input type="checkbox"> Checklist Portfólio está no admin</label>
   </div>
   <div class="certo"><b>Ticou a lista de cima?</b>
