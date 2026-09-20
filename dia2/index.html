@@ -863,22 +863,19 @@ Me devolve em duas colunas: marca e frase.</pre>
     <p class="sub">Cinquenta e-mails na mão são meio dia de trabalho, e semana que vem você não faz de novo. Pelo admin, são dez minutos, toda semana.</p>
   </div>
 
-  <div class="prompt">
-    <div class="top"><span class="lbl">Prompt · criar a aba Prospecção · no Claude Code</span><button class="copiar">Copiar</button></div>
-    <pre>No meu admin, cria a aba PROSPECÇÃO, que manda e-mail pras marcas da minha base.
-
-O envio vai pelo Resend. A chave do Resend é secreta: guarda ela como segredo dentro de uma função do Supabase e faz o admin chamar essa função. A chave não pode aparecer no site.
-
-Na aba eu quero:
-· escrever o modelo do e-mail, com assunto e texto, usando {marca}, {pessoa} e {conexao}, que o sistema troca sozinho
-· a lista das minhas marcas com caixinha de seleção e um botão de marcar todas com status "a enviar"
-· um botão de enviar teste só pra mim, antes de tudo
-· o botão de disparar, que manda um de cada vez com uma pausa entre eles
-· depois do envio, marcar a marca como enviado com a data, e me avisar se eu tentar enviar de novo pro mesmo e-mail
-· uma tabela com tudo que saiu: pra quem, quando e se deu erro
-
-Me explica no fim como eu troco o texto do modelo sem mexer no código.</pre>
+  <div class="certo"><b>O prompt dessa aba não fica aqui, e é de propósito</b>
+    <p>Ele é grande e vive mudando, então mora numa página só dele: <a href="https://eilaradam.github.io/admin-imersao/disparo/" target="_blank" rel="noopener">eilaradam.github.io/admin-imersao/disparo</a>. Lá você preenche os seus dados nos campos, copia num clique e cola no Claude Code, sempre na versão mais nova.</p>
   </div>
+
+  <h2 class="bloco">O que esse prompt constrói pra você</h2>
+  <ul class="passos">
+    <li><b>A lista sai da sua aba Marcas</b><span>Nada de cadastrar contato de novo. As opções de envio são filtros da sua própria tabela: só as selecionadas, todas com e-mail, só os leads, só quem está conversando, só quem já é cliente.</span></li>
+    <li><b>Escolher a dedo</b><span>Uma caixinha em cada linha da aba Marcas, com selecionar todas e limpar. A seleção fica salva, então dá pra marcar hoje e disparar amanhã.</span></li>
+    <li><b>Dois jeitos de escrever</b><span>Texto fácil, que monta o e-mail sozinho, e modo HTML pra quando você quiser algo mais elaborado. Tem modelos prontos em <a href="https://eilaradam.github.io/admin-imersao/modelo-email/" target="_blank" rel="noopener">eilaradam.github.io/admin-imersao/modelo-email</a>.</span></li>
+    <li><b>Teste antes e histórico depois</b><span>Botão de mandar só pra você, confirmação dizendo quantas marcas vão receber, barra de progresso e uma tabela com tudo que saiu.</span></li>
+    <li><b>As travas</b><span>Ninguém recebe duas vezes, quem responde SAIR sai da lista, e a chave do Resend nunca entra no seu site.</span></li>
+    <li><b>Plano B sem domínio</b><span>O modo rascunho monta o e-mail de cada marca e abre no seu Gmail pronto pra enviar, sem depender do Resend.</span></li>
+  </ul>
 
   <h2 class="bloco">Pra não cair no spam</h2>
   <ul class="pontos">
